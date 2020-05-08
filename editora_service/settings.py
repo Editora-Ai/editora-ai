@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'editoria_service.urls'
+ROOT_URLCONF = 'editora_service.urls'
 
 TEMPLATES = [
     {
@@ -76,7 +76,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'editoria_service.wsgi.application'
+WSGI_APPLICATION = 'editora_service.wsgi.application'
 
 
 # Database

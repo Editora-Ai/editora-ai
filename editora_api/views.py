@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect, Http404
 from .models import BGR
+from .serializers import BGRSerializer
 from rest_framework import generics
 
 

@@ -3,4 +3,11 @@ from django.contrib.auth.models import User
 import datetime
 
 
-# Create your models here.
+class BGR(models.Model):
+    owner = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
+    original_image = models.ImageField(upload_to='bgr/original')
+    modified_image = models.ImageField(upload_to='bgr/modified')
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.owner)

@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 
     # Local
     'editora_api',
+    'temp_front',
 ]
 
 MIDDLEWARE = [

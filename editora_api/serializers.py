@@ -3,6 +3,7 @@ from .models import BGR
 
 
 class AdminBGRSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = BGR
         fields = ('id', 'owner', 'original_image', 'modified_image',
@@ -12,6 +13,6 @@ class AdminBGRSerializer(serializers.ModelSerializer):
 class UserBGRSerializer(serializers.ModelSerializer):
     class Meta:
         model = BGR
-        fields = ('id', 'owner', 'original_image', 'modified_image',
+        fields = ('id', 'original_image', 'modified_image',
                   'date_created')
-        read_only_fields = ('owner', 'id', 'date_created', 'modified_image')
+        read_only_fields = ('id', 'date_created', 'modified_image')

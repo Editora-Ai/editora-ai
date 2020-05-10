@@ -1,9 +1,11 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <!-- SEO Meta Tags -->
     <meta name="description" content="Tivo is a HTML landing page template built with Bootstrap to help you crate engaging presentations for SaaS apps and convert visitors into users.">
     <meta name="author" content="Inovatik">
@@ -19,20 +21,20 @@
 
     <!-- Website Title -->
     <title>Tivo - SaaS App HTML Landing Page Template</title>
-    
+
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700&display=swap&subset=latin-ext" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/fontawesome-all.css" rel="stylesheet">
-    <link href="css/swiper.css" rel="stylesheet">
-	<link href="css/magnific-popup.css" rel="stylesheet">
-	<link href="css/styles.css" rel="stylesheet">
-	
+    <link href="{% static "temp_front/css/bootstrap.css" %}" rel="stylesheet">
+    <link href="{% static "temp_front/css/fontawesome-all.css" %}" rel="stylesheet">
+    <link href="{% static "temp_front/css/swiper.css" %}" rel="stylesheet">
+	<link href="{% static "temp_front/css/magnific-popup.css" %}" rel="stylesheet">
+	<link href="{% static "temp_front/css/styles.css" %}" rel="stylesheet">
+
 	<!-- Favicon  -->
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{% static "temp_front/images/favicon.png" %}">
 </head>
 <body data-spy="scroll" data-target=".fixed-top">
-    
+
     <!-- Preloader -->
 	<div class="spinner-wrapper">
         <div class="spinner">
@@ -42,7 +44,7 @@
         </div>
     </div>
     <!-- end of preloader -->
-    
+
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
@@ -52,8 +54,8 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Tivo</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="index.html"><img src="images/logo.svg" alt="alternative"></a> 
-            
+            <a class="navbar-brand logo-image" href="index.html"><img src="{% static "temp_front/images/logo.svg" %}" alt="alternative"></a>
+
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-awesome fas fa-bars"></span>
@@ -73,7 +75,7 @@
                         <a class="nav-link page-scroll" href="#details">DETAILS</a>
                     </li>
 
-                    <!-- Dropdown Menu -->          
+                    <!-- Dropdown Menu -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle page-scroll" href="#video" id="navbarDropdown" role="button" aria-haspopup="true" aria-expanded="false">VIDEO</a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -114,7 +116,7 @@
                     <div class="col-lg-6 col-xl-7">
                         <div class="image-container">
                             <div class="img-wrapper">
-                                <img class="img-fluid" src="images/header-software-app.png" alt="alternative">
+                                <img class="img-fluid" src="{% static "temp_front/images/header-software-app.png" %}" alt="alternative">
                             </div> <!-- end of img-wrapper -->
                         </div> <!-- end of image-container -->
                     </div> <!-- end of col -->
@@ -131,28 +133,28 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-12">
-                    
+
                     <!-- Image Slider -->
                     <div class="slider-container">
                         <div class="swiper-container image-slider">
                             <div class="swiper-wrapper">
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-1.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-1.png" %}" alt="alternative">
                                 </div>
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-2.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-2.png" %}" alt="alternative">
                                 </div>
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-3.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-3.png" %}" alt="alternative">
                                 </div>
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-4.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-4.png" %}" alt="alternative">
                                 </div>
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-5.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-5.png" %}" alt="alternative">
                                 </div>
                                 <div class="swiper-slide">
-                                        <img class="img-fluid" src="images/customer-logo-6.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/customer-logo-6.png" %}" alt="alternative">
                                 </div>
                             </div> <!-- end of swiper-wrapper -->
                         </div> <!-- end of swiper container -->
@@ -181,7 +183,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="images/description-1.png" alt="alternative">
+                            <img class="img-fluid" src="{% static "temp_front/images/description-1.png" %}" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Lists Builder</h4>
@@ -193,7 +195,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="images/description-2.png" alt="alternative">
+                            <img class="img-fluid" src="{% static "temp_front/images/description-2.png" %}" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Campaign Tracker</h4>
@@ -205,7 +207,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="images/description-3.png" alt="alternative">
+                            <img class="img-fluid" src="{% static "temp_front/images/description-3.png" %}" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Analytics Tool</h4>
@@ -256,7 +258,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="image-container">
-                                        <img class="img-fluid" src="images/features-1.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/features-1.png" %}" alt="alternative">
                                     </div> <!-- end of image-container -->
                                 </div> <!-- end of col -->
                                 <div class="col-lg-6">
@@ -289,7 +291,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="image-container">
-                                        <img class="img-fluid" src="images/features-2.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/features-2.png" %}" alt="alternative">
                                     </div> <!-- end of image-container -->
                                 </div> <!-- end of col -->
                                 <div class="col-lg-6">
@@ -322,7 +324,7 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="image-container">
-                                        <img class="img-fluid" src="images/features-3.png" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/features-3.png" %}" alt="alternative">
                                     </div> <!-- end of image-container -->
                                 </div> <!-- end of col -->
                                 <div class="col-lg-6">
@@ -349,7 +351,7 @@
                             </div> <!-- end of row -->
                         </div> <!-- end of tab-pane -->
                         <!-- end of tab -->
-                        
+
                     </div> <!-- end of tab content -->
                     <!-- end of tabs content -->
 
@@ -368,7 +370,7 @@
                 <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
                 <div class="col-lg-8">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/details-lightbox.png" alt="alternative">
+                        <img class="img-fluid" src="{% static "temp_front/images/details-lightbox.png" %}" alt="alternative">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
@@ -410,7 +412,7 @@
                 <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
                 <div class="col-lg-8">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/details-lightbox.png" alt="alternative">
+                        <img class="img-fluid" src="{% static "temp_front/images/details-lightbox.png" %}" alt="alternative">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
@@ -452,7 +454,7 @@
                 <button title="Close (Esc)" type="button" class="mfp-close x-button">×</button>
                 <div class="col-lg-8">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/details-lightbox.png" alt="alternative">
+                        <img class="img-fluid" src="{% static "temp_front/images/details-lightbox.png" %}" alt="alternative">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-4">
@@ -512,7 +514,7 @@
                 </div> <!-- end of col -->
                 <div class="col-lg-6">
                     <div class="image-container">
-                        <img class="img-fluid" src="images/details.png" alt="alternative">
+                        <img class="img-fluid" src="{% static "temp_front/images/details.png" %}" alt="alternative">
                     </div> <!-- end of image-container -->
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
@@ -531,7 +533,7 @@
                     <div class="image-container">
                         <div class="video-wrapper">
                             <a class="popup-youtube" href="https://www.youtube.com/watch?v=fLCjQJCekTs" data-effect="fadeIn">
-                                <img class="img-fluid" src="images/video-image.png" alt="alternative">
+                                <img class="img-fluid" src="{% static "temp_front/images/video-image.png" %}" alt="alternative">
                                 <span class="video-play-button">
                                     <span></span>
                                 </span>
@@ -540,7 +542,7 @@
                     </div> <!-- end of image-container -->
                     <!-- end of video preview -->
 
-                    <div class="p-heading">What better way to show off Tivo marketing automation saas app than presenting you some great situations of each module and tool available to users in a video</div>        
+                    <div class="p-heading">What better way to show off Tivo marketing automation saas app than presenting you some great situations of each module and tool available to users in a video</div>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
@@ -667,17 +669,17 @@
     <div class="slider-2">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">      
-                    
+                <div class="col-lg-12">
+
                     <!-- Text Slider -->
                     <div class="slider-container">
                         <div class="swiper-container text-slider">
                             <div class="swiper-wrapper">
-                                
+
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="image-wrapper">
-                                        <img class="img-fluid" src="images/testimonial-1.jpg" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/testimonial-1.jpg" %}" alt="alternative">
                                     </div> <!-- end of image-wrapper -->
                                     <div class="text-wrapper">
                                         <div class="testimonial-text">I started to use Tivo with the free trial about a year ago and never stopped since then. It does all the repeating marketing tasks and allows me to focus on core development activities like new product research and design. I love it and recommend it to everyone.</div>
@@ -689,7 +691,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="image-wrapper">
-                                        <img class="img-fluid" src="images/testimonial-2.jpg" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/testimonial-2.jpg" %}" alt="alternative">
                                     </div> <!-- end of image-wrapper -->
                                     <div class="text-wrapper">
                                         <div class="testimonial-text">Awesome features for the money. I never thought such a low ammount of money would bring me so many leads per month. Before Tivo I used the services of an agency which cost 10x more and delivered far less. Highly recommended to marketers focused on results.</div>
@@ -701,7 +703,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="image-wrapper">
-                                        <img class="img-fluid" src="images/testimonial-3.jpg" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/testimonial-3.jpg" %}" alt="alternative">
                                     </div> <!-- end of image-wrapper -->
                                     <div class="text-wrapper">
                                         <div class="testimonial-text">Tivo is the best marketing automation app for small and medium sized business. It understands the mindset of young entrepreneurs and provides the necessary data for wise marketing decisions. Just give it a try and you will definitely not regret spending your time.</div>
@@ -713,7 +715,7 @@
                                 <!-- Slide -->
                                 <div class="swiper-slide">
                                     <div class="image-wrapper">
-                                        <img class="img-fluid" src="images/testimonial-4.jpg" alt="alternative">
+                                        <img class="img-fluid" src="{% static "temp_front/images/testimonial-4.jpg" %}" alt="alternative">
                                     </div> <!-- end of image-wrapper -->
                                     <div class="text-wrapper">
                                         <div class="testimonial-text">Tivo is one of the greatest marketing automation apps out there. I especially love the Reporting Tools module because it gives me such a great amount of information based on little amounts of input gathered in just few weeks of light weight usage. Recommended!</div>
@@ -723,7 +725,7 @@
                                 <!-- end of slide -->
 
                             </div> <!-- end of swiper-wrapper -->
-                            
+
                             <!-- Add Arrows -->
                             <div class="swiper-button-next"></div>
                             <div class="swiper-button-prev"></div>
@@ -757,7 +759,7 @@
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group checkbox">
-                                <input type="checkbox" id="nterms" value="Agreed-to-Terms" required>I've read and agree to Tivo's written <a href="privacy-policy.html">Privacy Policy</a> and <a href="terms-conditions.html">Terms Conditions</a> 
+                                <input type="checkbox" id="nterms" value="Agreed-to-Terms" required>I've read and agree to Tivo's written <a href="privacy-policy.html">Privacy Policy</a> and <a href="terms-conditions.html">Terms Conditions</a>
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div class="form-group">
@@ -852,11 +854,11 @@
                                 <div class="media-body"><a class="white" href="mailto:contact@tivo.com">contact@tivo.com</a> <i class="fas fa-globe"></i><a class="white" href="#your-link">www.tivo.com</a></div>
                             </li>
                         </ul>
-                    </div> 
+                    </div>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
-    </div> <!-- end of footer -->  
+    </div> <!-- end of footer -->
     <!-- end of footer -->
 
 
@@ -869,18 +871,18 @@
                 </div> <!-- end of col -->
             </div> <!-- enf of row -->
         </div> <!-- end of container -->
-    </div> <!-- end of copyright --> 
+    </div> <!-- end of copyright -->
     <!-- end of copyright -->
-    
-    	
+
+
     <!-- Scripts -->
-    <script src="js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
-    <script src="js/popper.min.js"></script> <!-- Popper tooltip library for Bootstrap -->
-    <script src="js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
-    <script src="js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
-    <script src="js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
-    <script src="js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
-    <script src="js/validator.min.js"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
-    <script src="js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="{% static "temp_front/js/jquery.min.js" %}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
+    <script src="{% static "temp_front/js/popper.min.js" %}"></script> <!-- Popper tooltip library for Bootstrap -->
+    <script src="{% static "temp_front/js/bootstrap.min.js" %}"></script> <!-- Bootstrap framework -->
+    <script src="{% static "temp_front/js/jquery.easing.min.js" %}"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
+    <script src="{% static "temp_front/js/swiper.min.js" %}"></script> <!-- Swiper for image and text sliders -->
+    <script src="{% static "temp_front/js/jquery.magnific-popup.js" %}"></script> <!-- Magnific Popup for lightboxes -->
+    <script src="{% static "temp_front/js/validator.min.js" %}"></script> <!-- Validator.js - Bootstrap plugin that validates forms -->
+    <script src="{% static "temp_front/js/scripts.js" %}"></script> <!-- Custom scripts -->
 </body>
 </html>

@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.utils.crypto import get_random_string
 from .models import BGR
 from .bgr import Final
-from .serializers import BGRSerializer
+from .serializers import AdminBGRSerializer, UserBGRSerializer
 from rest_framework import generics
 import cv2
 from PIL import Image
@@ -18,7 +18,7 @@ def bgr_process(self, image):
 
 
 class ListBGR(generics.ListCreateAPIView):
-    serializer_class = BGRSerializer
+
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user,
                         original_image= self.request.data.get('original_image'),
@@ -32,9 +32,12 @@ class ListBGR(generics.ListCreateAPIView):
         else:
             return BGR.objects.filter(owner=self.request.user)
 
+    def get_serializer_class(self):
+        if self.request.user.is_superuser:
+            return AdminBGRSerializer
+        return UserBGRSerializer
 
 class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = BGRSerializer
 
     def get_queryset(self):
         if self.request.user.is_staff:
@@ -42,3 +45,8 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
         else:
             return BGR.objects.filter(owner=self.request.user,
                                       id=self.kwargs['pk'])
+
+    def get_serializer_class(self):
+        if self.request.user.is_superuser:
+            return AdminBGRSerializer
+        return UserBGRSerializer

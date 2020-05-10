@@ -36,6 +36,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    #### API Related Paths ####
     path('admin/', admin.site.urls),
     path('api/v1/', include('editora_api.urls')),
     path('api-auth/', include('rest_framework.urls')),
@@ -46,4 +47,10 @@ urlpatterns = [
    url(r'^api-docs(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
    url(r'^api-docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    url(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+   #### API Related Paths ####
+
+
+   #### Front-End Related Paths ####
+   path('', include('temp_front.urls')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

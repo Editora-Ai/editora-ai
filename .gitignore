@@ -7,6 +7,9 @@ media/
 ### BGR models ###
 train_data/
 
+### Static ###
+static/
+
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

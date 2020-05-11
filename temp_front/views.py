@@ -15,7 +15,9 @@ def login(request):
 
 @login_required(login_url="/log-in")
 def dashboard(request):
-    return render(request, 'temp_front/dashboard.html')
+
+    data = {'name': request.user.get_full_name().title()}
+    return render(request, 'temp_front/dashboard.html', data)
 
 @login_required(login_url="/log-in")
 def mylogout(request):

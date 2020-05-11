@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     # Homepage path
     path('', views.index, name='index'),
+    path('log-in', views.login, name='login'),
 
 ]

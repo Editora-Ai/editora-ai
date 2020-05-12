@@ -6,7 +6,6 @@ from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from editora_api.models import BGR
 
-
 def index(request):
     return render(request, 'temp_front/index.html')
 
@@ -15,8 +14,10 @@ def login(request):
 
 @login_required(login_url="/log-in")
 def dashboard(request):
-
-    data = {'name': request.user.get_full_name().title()}
+    fullname = request.user.get_full_name().title()
+    name = request.user.get_short_name().title()
+    user_bgr_tasks = BGR.objects.filter(owner=request.user)
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks }
     return render(request, 'temp_front/dashboard.html', data)
 
 @login_required(login_url="/log-in")

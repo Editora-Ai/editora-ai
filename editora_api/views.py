@@ -9,23 +9,22 @@ from rest_framework import generics
 import cv2
 from PIL import Image
 
-def bgr_process(self, image):
+def bgr_process(self, image, name):
     img = Image.open(image)
     modified_img = Final(img)
-    name = get_random_string(length=6)
-    cv2.imwrite("media/bgr/modified/" + name + ".jpeg", modified_img)
-    return name + ".jpeg"
+    cv2.imwrite("media/bgr/modified/" + name, modified_img)
 
 
 class ListBGR(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
+        file_name = str(self.request.FILES['original_image'].name)
+        bgr_process(self, image= self.request.data.get('original_image'),
+                    name= file_name)
         serializer.save(owner=self.request.user,
-                        original_image= self.request.data.get('original_image'),
-                        modified_image= "bgr/modified/"
-                        + bgr_process(self,
-                        image= self.request.data.get('original_image')))
-
+                        original_image= self.request.data.get('original_image')
+                       ,modified_image= "bgr/modified/" + file_name
+        )
     def get_queryset(self):
         if self.request.user.is_staff:
             return BGR.objects.all()

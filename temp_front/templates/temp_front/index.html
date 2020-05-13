@@ -96,8 +96,13 @@
                     <div class="col-lg-6 col-xl-5">
                         <div class="text-container">
                             <h1>Let The Artificial Intelligence Take Care of Your Images!</h1>
+                            {% if user.is_authenticated %}
+                            <p class="p-large">You have already logged in to our services!</p>
+                            <a class="btn-solid-lg page-scroll" href="/dashboard">Get started</a>
+                            {% else %}
                             <p class="p-large">In Order To Use Our Services Please Sign Up.</p>
-                            <a class="btn-solid-lg page-scroll" href="sign-up.html">SIGN UP</a>
+                            <a class="btn-solid-lg page-scroll" href="/sign-up">SIGN UP</a>
+                            {% endif %}
                         </div> <!-- end of text-container -->
                     </div> <!-- end of col -->
                     <div class="col-lg-6 col-xl-7">
@@ -298,7 +303,7 @@
                     <h3>Background Removal</h3>
                     <hr>
                     <p>We used artificial intelligence to detect and remove background of product images. At this moment our service is specialized for e-commerce photos. In the future you can remove background of all images by using editorAai!</p>
-                    <a class="btn-solid-reg mfp-close" href="sign-up.html">SIGN UP</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">BACK</a>
+                    <a class="btn-solid-reg mfp-close" href="/sign-up">SIGN UP</a> <a class="btn-outline-reg mfp-close as-button" href="#screenshots">BACK</a>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
         </div> <!-- end of container -->
@@ -351,7 +356,7 @@
                     <div class="text-container">
                         <h2>Why Background Removal?</h2>
                         <p>One of the most important things in having a great e-commerce website is choosing appropriate images. In order to achieve this goal first step of the editing process is removing the background. According to what we learned from professional editors removing the background of images takes at least 2 minutes of their time while our artificial intelligence not only eliminates this pain but also does it in just 20 seconds.</p>
-                        <a class="btn-solid-reg page-scroll" href="sign-up.html">SIGN UP</a>
+                        <a class="btn-solid-reg page-scroll" href="/sign-up">SIGN UP</a>
                     </div> <!-- end of text-container -->
                 </div> <!-- end of col -->
                 <div class="col-lg-6">

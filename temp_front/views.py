@@ -9,7 +9,10 @@ from editora_api.models import BGR
 def index(request):
     return render(request, 'temp_front/index.html')
 
+
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('/dashboard')
     return render(request, 'temp_front/log-in.html')
 
 @login_required(login_url="/log-in")

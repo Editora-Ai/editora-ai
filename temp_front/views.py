@@ -26,8 +26,8 @@ def signup(request):
 
 @login_required(login_url="/log-in")
 def dashboard(request):
-    fullname = request.user.get_full_name().title()
-    name = request.user.get_short_name().title()
+    fullname = (request.user.firstname + " " + request.user.lastname).title()
+    name = request.user.firstname.title()
     user_bgr_tasks = BGR.objects.filter(owner=request.user)
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks }
     return render(request, 'temp_front/dashboard.html', data)

@@ -22,7 +22,9 @@ from django.views.generic import RedirectView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from editora_api.serializers import NameRegistrationView
+
+
+admin.autodiscover()
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -43,7 +45,8 @@ urlpatterns = [
     path('api/v1/', include('editora_api.urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/new-user/$', NameRegistrationView.as_view(), name="rest_name_register"),
+    path('rest-auth/registration/',
+         include('rest_auth.registration.urls')),
     url(r'^account/', include('allauth.urls')),
 
 
@@ -59,3 +62,4 @@ urlpatterns = [
    path('', include('temp_front.urls')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

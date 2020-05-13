@@ -1,11 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
+#from django.contrib.auth.models import User
+from django.conf import settings
 import ntpath
 import datetime
 
 
+
 class BGR(models.Model):
-    owner = models.ForeignKey(User, unique=False, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, unique=False, on_delete=models.CASCADE)
     original_image = models.ImageField(upload_to='bgr/original')
     modified_image = models.ImageField(upload_to='bgr/modified', null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)

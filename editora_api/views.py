@@ -40,10 +40,10 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         if self.request.user.is_staff:
-            return BGR.objects.filter(id=self.kwargs['pk'])
+            return BGR.objects.filter(id=self.kwargs.get('pk'))
         else:
             return BGR.objects.filter(owner=self.request.user,
-                                      id=self.kwargs['pk'])
+                                      id=self.kwargs.get('pk'))
 
     def get_serializer_class(self):
         if self.request.user.is_superuser:

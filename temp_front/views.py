@@ -28,9 +28,22 @@ def signup(request):
 def dashboard(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
+    company = request.user.company.upper()
     user_bgr_tasks = BGR.objects.filter(owner=request.user)
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks }
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
+            'company': company}
+
     return render(request, 'temp_front/dashboard.html', data)
+
+@login_required(login_url="/log-in")
+def bgremoval(request):
+    fullname = (request.user.firstname + " " + request.user.lastname).title()
+    name = request.user.firstname.title()
+    company = request.user.company.upper()
+    user_bgr_tasks = BGR.objects.filter(owner=request.user)
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
+            'company': company }
+    return render(request, 'temp_front/bgr.html', data)
 
 @login_required(login_url="/log-in")
 def mylogout(request):

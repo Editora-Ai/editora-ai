@@ -10,4 +10,5 @@ urlpatterns = [
     path('log-out', views.mylogout, name='logout'),
     path('sign-up', views.signup, name='signup'),
     path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/bgremoval', views.bgremoval, name='bgremoval'),
 ]

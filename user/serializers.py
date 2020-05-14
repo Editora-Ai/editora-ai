@@ -23,6 +23,12 @@ class CustomRegisterSerializer(RegisterSerializer):
             'lastname': self.validated_data.get('lastname', ''),
             'company': self.validated_data.get('company', ''),
         }
+    def custom_signup(self, request, user):
+        user.firstname = self.validated_data.get('firstname')
+        user.lastname = self.validated_data.get('lastname')
+        user.company = self.validated_data.get('company')
+        user.save(update_fields=['firstname', 'lastname', 'company',])
+
 
 class CustomUserDetailsSerializer(serializers.ModelSerializer):
     class Meta:

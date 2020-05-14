@@ -10,7 +10,8 @@ import cv2
 import os
 from PIL import Image
 
-def bgr_process(self, image, name, idstr):
+
+def bgr_process(image, name, idstr):
     img = Image.open(image)
     modified_img = Final(img)
     cv2.imwrite("media/bgr/modified/" + idstr + "_" + name, modified_img)
@@ -24,11 +25,13 @@ class ListBGR(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         file_name = str(self.request.FILES['original_image'].name)
+        img = Image.open(self.request.data.get('original_image'))
+        img.save('media/bgr/original/' + file_name)
         random_str = get_random_string(length=6)
-        bgr_process(self, image= self.request.data.get('original_image'),
-                    name= file_name, idstr=random_str)
+        bgr_process(image='media/bgr/original/' + file_name,
+                    name=file_name, idstr=random_str)
         serializer.save(owner=self.request.user,
-                        original_image= self.request.data.get('original_image')
+                        original_image= 'bgr/original/' + file_name
                        ,modified_image= "bgr/modified/" + random_str + "_" +
                        file_name)
 

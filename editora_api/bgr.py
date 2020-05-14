@@ -14,7 +14,7 @@ import cv2
 import numpy as np
 
 checkpoint_dir = 'editora_api/train_data'
-checkpoint_dir2 = 'editora_api/train_data'
+#checkpoint_dir2 = 'editora_api/train_data'
 const=7
 BUFFER_SIZE = 200
 BATCH_SIZE = 1

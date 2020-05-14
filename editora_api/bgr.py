@@ -20,7 +20,6 @@ BUFFER_SIZE = 200
 BATCH_SIZE = 1
 IMG_WIDTH = 256*const
 IMG_HEIGHT = 256*const
-alan = time.time()
 
 def load(image_file):
   image = tf.io.read_file(image_file)
@@ -35,12 +34,6 @@ def load(image_file):
   real_image = tf.cast(real_image, tf.float32)
 
   return input_image, real_image
-
-def average(img):
-  img = np.array(img , np.float32)
-  aaa = (len(img)*len(img[0])*3)
-  avg = img.sum()/aaa
-  return avg
 
 
 def resize(input_image, real_image, height, width):
@@ -68,7 +61,7 @@ def normalize(input_image, real_image):
 
 
 
-@tf.function()
+#@tf.function()
 def random_jitter(input_image, real_image):
   input_image, real_image , IMW , IMH= resize(input_image, real_image, 286*const, 286*const)
 
@@ -132,19 +125,21 @@ def Generator():
   inputs = tf.keras.layers.Input(shape=[256*const,256*const,3])
 
   down_stack = [
-    downsample(64, 4, apply_batchnorm=False), # change Arch
-    downsample(128, 4),
-    downsample(256, 4),
-    downsample(512, 4),
-    downsample(512, 4),
-    downsample(512, 4),
-    downsample(512, 4),
-    downsample(512, 4),
-
+    downsample(64, 4, apply_batchnorm=False), # (bs, 512, 128, 64)
+    downsample(128, 4), # (bs, 256, 64, 128)
+    downsample(256, 4), # (bs, 128, 32, 256)
+    downsample(512, 4), # (bs, 64, 16, 512)
+    downsample(512, 4), # (bs, 32, 8, 512)
+    downsample(512, 4), # (bs, 16, 4, 512)
+    downsample(512, 4), # (bs, 8, 2, 512)
+    downsample(512, 4), # (bs, 4, 1, 512)
+#    downsample(1024, 4), # (bs, 2, 2, 512)
+#    downsample(1024, 4), # (bs, 2, 1, 512)
   ]
 
   up_stack = [
-
+#    upsample(1024, 4, apply_dropout=True), # (bs, 2, 2, 1024)
+#    upsample(1024, 4, apply_dropout=True), # (bs, 4, 4, 1024)
     upsample(512, 4, apply_dropout=True), # (bs, 2, 2, 1024)
     upsample(512, 4, apply_dropout=True), # (bs, 4, 4, 1024)
     upsample(512, 4, apply_dropout=True), # (bs, 8, 8, 1024)
@@ -154,6 +149,7 @@ def Generator():
     upsample(64, 4), # (bs, 128, 128, 128)
   ]
 
+
   initializer = tf.random_normal_initializer(0., 0.02)
   last = tf.keras.layers.Conv2DTranspose(OUTPUT_CHANNELS, 4,
                                          strides=2,
@@ -162,12 +158,16 @@ def Generator():
                                          activation='tanh') # (bs, 256, 256, 3)
 
   x = inputs
+
+  # Downsampling through the model
   skips = []
   for down in down_stack:
     x = down(x)
     skips.append(x)
 
   skips = reversed(skips[:-1])
+
+  # Upsampling and establishing the skip connections
   for up, skip in zip(up_stack, skips):
     x = up(x)
     x = tf.keras.layers.Concatenate()([x, skip])
@@ -198,6 +198,7 @@ def Discriminator():
   down1 = downsample(64, 4, False)(x) # (bs, 128, 128, 64)
   down2 = downsample(128, 4)(down1) # (bs, 64, 64, 128)
   down3 = downsample(256, 4)(down2) # (bs, 32, 32, 256)
+#  down4 = downsample(512, 4)(down3) # (bs, 32, 32, 256)
 
   zero_pad1 = tf.keras.layers.ZeroPadding2D()(down3) # (bs, 34, 34, 256)
   conv = tf.keras.layers.Conv2D(512, 4, strides=1,
@@ -228,7 +229,7 @@ def discriminator_loss(disc_real_output, disc_generated_output):
 
 generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
-
+#
 checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
                                  discriminator_optimizer=discriminator_optimizer,
@@ -239,97 +240,105 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
 
 
 
+
 def generate_images3(model,input_image):
-  imwidth = input_image.shape[1]
-  imheight = input_image.shape[0]
-  input_image = np.array(input_image , np.float32)
+	imwidth = input_image.shape[1]
+	imheight = input_image.shape[0]
+	input_image = np.array(input_image , np.float32)
 
-  input_image = cv2.resize(input_image , dsize = (256*const , 256*const))
-  input_image = np.reshape(input_image , (1,256*const,256*const,3))
-  input_image = (input_image / 127.5) - 1
-  prediction = model(input_image , training = False)
+	input_image = cv2.resize(input_image , dsize = (256*const , 256*const))
+	input_image = np.reshape(input_image , (1,256*const,256*const,3))
+	input_image = (input_image / 127.5) - 1
+	prediction = model(input_image , training = False)
 #    out = cv2.resize(prediction[0],dsize = (imwidth,imheight))
-  out = prediction[0]
-  out = np.array(out,np.float32)
-  out = out*0.5 + 0.5
-  out = out*255
-  out = np.array(out , np.uint8)
-  out = cv2.resize(out,dsize = (imwidth,imheight))
+	out = prediction[0]
+	out = np.array(out,np.float32)
+#	out = out*0.5 + 0.5
+	out = out*255
+	out = np.array(out , np.uint8)
+	cv2.imwrite('service_tmp/bgr/bgr_temp.jpg' , out)
+	out = cv2.resize(out,dsize = (imwidth,imheight))
 
-  return out
+	return out
 
 def fixchannels(img):
-  imw = img.shape[0]
-  imh = img.shape[1]
-  imd = img.shape[2]
-  bed = np.zeros(shape = (imw, imh , imd))
-  b = img[:,:,0]
-  g = img[:,:,1]
-  r = img[:,:,2]
-  bed[:,:,0] = r
-  bed[:,:,1] = g
-  bed[:,:,2] = b
-  return bed
+	imw = img.shape[0]
+	imh = img.shape[1]
+	imd = img.shape[2]
+	bed = np.zeros(shape = (imw, imh , imd))
+	b = img[:,:,0]
+	g = img[:,:,1]
+	r = img[:,:,2]
+	bed[:,:,0] = r
+	bed[:,:,1] = g
+	bed[:,:,2] = b
+	return bed
 
 
+checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
+def Final(image, alpha = 1.27 , beta = 17):
 
-def Final(image, alpha = 1 , beta = 1):
-  checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
-  x,X,y,Y = 0,0,0,0
+	x,X,y,Y = 0,0,0,0
+#	x2,X2,y2,Y2 = 0,0,0,0
 
-  IMAGE = np.array(image , np.uint8)
-
-
-  img = fixchannels(IMAGE)
-
-  otpt = generate_images3(generator , img)
-  cropmap = otpt[:,:,0]
-  for i in range(cropmap.shape[0]):
-    if 2 in cropmap[i]:
-      x = i
-      break
-  for i in range(cropmap.shape[0]):
-    if 2 in cropmap[i]:
-      X = i
-  for i in range(cropmap.shape[1]):
-    if 2 in cropmap[:,i]:
-      y = i
-      break
-  for i in range(cropmap.shape[1]):
-    if 2 in cropmap[:,i]:
-      Y = i
-  delta = 70
-  if x-delta > 0 :
-    x = x-delta
-  else :
-    x = 0
-
-  if y-delta > 0 :
-    y = y-delta
-  else :
-    y = 0
-
-  if X+delta < cropmap.shape[0] :
-    X += delta
-  else :
-    X = cropmap.shape[0]
-  if Y+delta < cropmap.shape[1] :
-    Y += delta
-  else :
-    Y = cropmap.shape[1]
+	IMAGE = np.array(image , np.uint8)
 
 
-  croped_image = img[x:X,y:Y]
-  croped_raw = IMAGE[x:X , y:Y]
-  checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir2))
-  otpt = generate_images3(generator , croped_image)
-  BGrem_map = otpt[:,:,0]
-  for i in range(BGrem_map.shape[0]):
-    for j in range(BGrem_map.shape[1]):
-      if BGrem_map[i][j] >150:
-        croped_raw[i][j]=[255,255,255]
-  croped_raw = np.array(croped_raw, np.float32)
-  croped_raw = croped_raw*alpha + beta
-  croped_raw = np.clip(croped_raw,0,255)
-  croped_raw = np.array(croped_raw, np.uint8)
-  return croped_raw
+	img = fixchannels(IMAGE)
+
+	otpt = generate_images3(generator , img)
+	cropmap = otpt[:,:,0]
+
+	for i in range(cropmap.shape[0]):
+		if 2 in cropmap[i]:
+			x = i
+			break
+	for i in range(cropmap.shape[0]):
+		if 2 in cropmap[i]:
+			X = i
+	for i in range(cropmap.shape[1]):
+		if 2 in cropmap[:,i]:
+			y = i
+			break
+	for i in range(cropmap.shape[1]):
+		if 2 in cropmap[:,i]:
+			Y = i
+	delta = 50
+	if x-delta > 0 :
+		x = x-delta
+	else :
+		x = 0
+
+	if y-delta > 0 :
+		y = y-delta
+	else :
+		y = 0
+
+	if X+delta < cropmap.shape[0] :
+		X += delta
+	else :
+		X = cropmap.shape[0]
+	if Y+delta < cropmap.shape[1] :
+		Y += delta
+	else :
+		Y = cropmap.shape[1]
+
+
+	croped_image = img[x:X,y:Y]
+	croped_raw = IMAGE[x:X , y:Y]
+#	checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir2))
+	otpt = generate_images3(generator , croped_image)
+	BGrem_map = otpt[:,:,0]
+	BGrem_map = np.array(BGrem_map , np.uint8)
+	croped_raw = np.array(croped_raw , np.uint8)
+	BGrem_map = BGrem_map.reshape(BGrem_map.shape[0]*BGrem_map.shape[1])
+	PPP = croped_raw.shape[0]
+	QQQ = croped_raw.shape[1]
+	croped_raw = croped_raw.reshape(croped_raw.shape[0]*croped_raw.shape[1] , 3)
+	croped_raw[BGrem_map>252] = [255,255,255]
+	croped_raw = croped_raw.reshape(PPP,QQQ , 3)
+	croped_raw = np.array(croped_raw, np.float32)
+	croped_raw = croped_raw*alpha + beta
+	croped_raw = np.clip(croped_raw,0,255)
+	croped_raw = np.array(croped_raw, np.uint8)
+	return croped_raw

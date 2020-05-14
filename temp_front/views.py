@@ -29,7 +29,7 @@ def dashboard(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
     company = request.user.company.upper()
-    user_bgr_tasks = BGR.objects.filter(owner=request.user)
+    user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')[:5]
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
             'company': company}
 

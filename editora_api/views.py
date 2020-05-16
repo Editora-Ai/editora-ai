@@ -65,4 +65,11 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.user.is_superuser:
             return AdminBGRSerializer
-        return UserBGRSerializer
+        return UserBGRSerialize
+
+    def perform_destroy(self, instance):
+        orig_path = os.path.abspath(instance.modified_image.url)
+        modif_path = os.path.abspath(instance.original_image.url)
+        os.remove(orig_path.strip("/"))
+        os.remove(modif_path.strip("/"))
+

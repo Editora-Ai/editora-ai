@@ -249,7 +249,6 @@ def generate_images3(model,input_image):
     input_image = cv2.resize(input_image , dsize = (256*const , 256*const))
     input_image = np.reshape(input_image , (1,256*const,256*const,3))
     input_image = (input_image / 127.5) - 1
-    print("Inside function")
     prediction = model(input_image , training = False)
 #    out = cv2.resize(prediction[0],dsize = (imwidth,imheight))
     out = prediction[0]

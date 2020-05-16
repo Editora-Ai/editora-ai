@@ -11,6 +11,25 @@ class BGR(models.Model):
     original_image = models.ImageField(upload_to='bgr/original')
     modified_image = models.ImageField(upload_to='bgr/modified', null=True)
     date_created = models.DateTimeField(auto_now_add=True, null=True)
+    img_id = models.CharField(max_length=100)
+
+    # Status field
+    QUEUED = 'queued'
+    SUCCESS = 'success'
+    FAILED = 'failed'
+    PROCESSING = 'processing'
+
+    STATUS = [
+        (QUEUED, 'Queued'),
+        (SUCCESS, 'Success'),
+        (FAILED, 'Failed'),
+        (PROCESSING, 'Processing'),
+    ]
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS,
+        default=QUEUED,
+    )
 
     def original_filename(self):
         return ntpath.basename(str(self.original_image))

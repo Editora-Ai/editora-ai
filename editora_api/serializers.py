@@ -10,14 +10,14 @@ class AdminBGRSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BGR
-        fields = ('id', 'owner', 'original_image', 'modified_image',
+        fields = ('id', 'img_id', 'status', 'owner', 'original_image', 'modified_image',
                   'date_created')
-        read_only_fields = ('id', 'owner', 'date_created', 'modified_image')
+        read_only_fields = ('id', 'owner', 'img_id', 'date_created', 'modified_image')
 
 
 class UserBGRSerializer(serializers.ModelSerializer):
     class Meta:
         model = BGR
-        fields = ('id', 'original_image', 'modified_image',
+        fields = ('id', 'status', 'original_image', 'modified_image',
                   'date_created')
-        read_only_fields = ('id', 'owner', 'date_created', 'modified_image')
+        read_only_fields = ('id', 'status' 'owner', 'img_id' , 'date_created', 'modified_image')

@@ -9,8 +9,10 @@ from rest_framework import generics
 import cv2
 import os
 from PIL import Image
+from editora_service.celery import app
 
 
+@app.task
 def bgr_process(image, name, idstr):
     img = Image.open(image)
     modified_img = Final(img)
@@ -28,7 +30,7 @@ class ListBGR(generics.ListCreateAPIView):
         img = Image.open(self.request.data.get('original_image'))
         img.save('media/bgr/original/' + file_name)
         random_str = get_random_string(length=6)
-        bgr_process(image='media/bgr/original/' + file_name,
+        bgr_process.delay(image='media/bgr/original/' + file_name,
                     name=file_name, idstr=random_str)
         serializer.save(owner=self.request.user,
                         original_image= 'bgr/original/' + file_name

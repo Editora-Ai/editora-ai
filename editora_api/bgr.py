@@ -242,103 +242,105 @@ checkpoint = tf.train.Checkpoint(generator_optimizer=generator_optimizer,
 
 
 def generate_images3(model,input_image):
-	imwidth = input_image.shape[1]
-	imheight = input_image.shape[0]
-	input_image = np.array(input_image , np.float32)
+    imwidth = input_image.shape[1]
+    imheight = input_image.shape[0]
+    input_image = np.array(input_image , np.float32)
 
-	input_image = cv2.resize(input_image , dsize = (256*const , 256*const))
-	input_image = np.reshape(input_image , (1,256*const,256*const,3))
-	input_image = (input_image / 127.5) - 1
-	prediction = model(input_image , training = False)
+    input_image = cv2.resize(input_image , dsize = (256*const , 256*const))
+    input_image = np.reshape(input_image , (1,256*const,256*const,3))
+    input_image = (input_image / 127.5) - 1
+    print("Inside function")
+    prediction = model(input_image , training = False)
 #    out = cv2.resize(prediction[0],dsize = (imwidth,imheight))
-	out = prediction[0]
-	out = np.array(out,np.float32)
-#	out = out*0.5 + 0.5
-	out = out*255
-	out = np.array(out , np.uint8)
-	cv2.imwrite('service_tmp/bgr/bgr_temp.jpg' , out)
-	out = cv2.resize(out,dsize = (imwidth,imheight))
+    out = prediction[0]
+    out = np.array(out,np.float32)
+#    out = out*0.5 + 0.5
+    out = out*255
+    out = np.array(out , np.uint8)
+    cv2.imwrite('service_tmp/bgr/bgr_temp.jpg' , out)
+    out = cv2.resize(out,dsize = (imwidth,imheight))
 
-	return out
+    return out
 
 def fixchannels(img):
-	imw = img.shape[0]
-	imh = img.shape[1]
-	imd = img.shape[2]
-	bed = np.zeros(shape = (imw, imh , imd))
-	b = img[:,:,0]
-	g = img[:,:,1]
-	r = img[:,:,2]
-	bed[:,:,0] = r
-	bed[:,:,1] = g
-	bed[:,:,2] = b
-	return bed
+    imw = img.shape[0]
+    imh = img.shape[1]
+    imd = img.shape[2]
+    bed = np.zeros(shape = (imw, imh , imd))
+    b = img[:,:,0]
+    g = img[:,:,1]
+    r = img[:,:,2]
+    bed[:,:,0] = r
+    bed[:,:,1] = g
+    bed[:,:,2] = b
+    return bed
 
 
 checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
 def Final(image, alpha = 1.27 , beta = 17):
 
-	x,X,y,Y = 0,0,0,0
-#	x2,X2,y2,Y2 = 0,0,0,0
+    x,X,y,Y = 0,0,0,0
+    #x2,X2,y2,Y2 = 0,0,0,0
 
-	IMAGE = np.array(image , np.uint8)
-
-
-	img = fixchannels(IMAGE)
-
-	otpt = generate_images3(generator , img)
-	cropmap = otpt[:,:,0]
-
-	for i in range(cropmap.shape[0]):
-		if 2 in cropmap[i]:
-			x = i
-			break
-	for i in range(cropmap.shape[0]):
-		if 2 in cropmap[i]:
-			X = i
-	for i in range(cropmap.shape[1]):
-		if 2 in cropmap[:,i]:
-			y = i
-			break
-	for i in range(cropmap.shape[1]):
-		if 2 in cropmap[:,i]:
-			Y = i
-	delta = 50
-	if x-delta > 0 :
-		x = x-delta
-	else :
-		x = 0
-
-	if y-delta > 0 :
-		y = y-delta
-	else :
-		y = 0
-
-	if X+delta < cropmap.shape[0] :
-		X += delta
-	else :
-		X = cropmap.shape[0]
-	if Y+delta < cropmap.shape[1] :
-		Y += delta
-	else :
-		Y = cropmap.shape[1]
+    IMAGE = np.array(image , np.uint8)
 
 
-	croped_image = img[x:X,y:Y]
-	croped_raw = IMAGE[x:X , y:Y]
-#	checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir2))
-	otpt = generate_images3(generator , croped_image)
-	BGrem_map = otpt[:,:,0]
-	BGrem_map = np.array(BGrem_map , np.uint8)
-	croped_raw = np.array(croped_raw , np.uint8)
-	BGrem_map = BGrem_map.reshape(BGrem_map.shape[0]*BGrem_map.shape[1])
-	PPP = croped_raw.shape[0]
-	QQQ = croped_raw.shape[1]
-	croped_raw = croped_raw.reshape(croped_raw.shape[0]*croped_raw.shape[1] , 3)
-	croped_raw[BGrem_map>252] = [255,255,255]
-	croped_raw = croped_raw.reshape(PPP,QQQ , 3)
-	croped_raw = np.array(croped_raw, np.float32)
-	croped_raw = croped_raw*alpha + beta
-	croped_raw = np.clip(croped_raw,0,255)
-	croped_raw = np.array(croped_raw, np.uint8)
-	return croped_raw
+    img = fixchannels(IMAGE)
+
+    otpt = generate_images3(generator , img)
+
+    cropmap = otpt[:,:,0]
+
+    for i in range(cropmap.shape[0]):
+        if 2 in cropmap[i]:
+            x = i
+            break
+    for i in range(cropmap.shape[0]):
+        if 2 in cropmap[i]:
+            X = i
+    for i in range(cropmap.shape[1]):
+        if 2 in cropmap[:,i]:
+            y = i
+            break
+    for i in range(cropmap.shape[1]):
+        if 2 in cropmap[:,i]:
+            Y = i
+    delta = 50
+    if x-delta > 0 :
+        x = x-delta
+    else :
+        x = 0
+
+    if y-delta > 0 :
+        y = y-delta
+    else :
+        y = 0
+
+    if X+delta < cropmap.shape[0] :
+        X += delta
+    else :
+        X = cropmap.shape[0]
+    if Y+delta < cropmap.shape[1] :
+        Y += delta
+    else :
+        Y = cropmap.shape[1]
+
+
+    croped_image = img[x:X,y:Y]
+    croped_raw = IMAGE[x:X , y:Y]
+#    checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir2))
+    otpt = generate_images3(generator , croped_image)
+    BGrem_map = otpt[:,:,0]
+    BGrem_map = np.array(BGrem_map , np.uint8)
+    croped_raw = np.array(croped_raw , np.uint8)
+    BGrem_map = BGrem_map.reshape(BGrem_map.shape[0]*BGrem_map.shape[1])
+    PPP = croped_raw.shape[0]
+    QQQ = croped_raw.shape[1]
+    croped_raw = croped_raw.reshape(croped_raw.shape[0]*croped_raw.shape[1] , 3)
+    croped_raw[BGrem_map>252] = [255,255,255]
+    croped_raw = croped_raw.reshape(PPP,QQQ , 3)
+    croped_raw = np.array(croped_raw, np.float32)
+    croped_raw = croped_raw*alpha + beta
+    croped_raw = np.clip(croped_raw,0,255)
+    croped_raw = np.array(croped_raw, np.uint8)
+    return croped_raw

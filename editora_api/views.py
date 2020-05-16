@@ -68,6 +68,7 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
         return UserBGRSerialize
 
     def perform_destroy(self, instance):
+        instance.delete()
         orig_path = os.path.abspath(instance.modified_image.url)
         modif_path = os.path.abspath(instance.original_image.url)
         os.remove(orig_path.strip("/"))

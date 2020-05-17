@@ -34,6 +34,8 @@ class ListBGR(generics.ListCreateAPIView):
 
     def post(self, request):
         outputs = []
+        ids = []
+        info = {}
         for file in self.request.FILES.getlist('original_image'):
             new_task = BGR()
             file_name = str(file.name)
@@ -45,12 +47,15 @@ class ListBGR(generics.ListCreateAPIView):
             new_task.modified_image = "bgr/modified/" + random_str + "_" + file_name
             new_task.img_id= random_str
             new_task.save()
+            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
+            ids.append(new_task.id)
             bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + file_name,
                         'name': file_name, 'idstr': random_str})
-            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
-        addresses = {str(os.path.basename(outputs[i])).split('_', 1)[-1]: outputs[i] for i in range(len(outputs))}
+        for i in ids:
+            for x in outputs:
+                info[i] = x
         content = {'Message': 'Your task is successfully queued on editora.',
-                   'outputs': addresses,
+                   'outputs': info,
                    }
         return Response(content, status=status.HTTP_200_OK)
 

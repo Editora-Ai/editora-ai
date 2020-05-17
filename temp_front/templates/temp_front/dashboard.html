@@ -102,7 +102,7 @@
               <li class="nav-item">
                 <a href="/dashboard/classification" class="nav-link disabled">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Classification</p>
+                  <p>Labelling</p>
                 </a>
               </li>
             </ul>
@@ -245,13 +245,40 @@
                           <div>Background Removal</div>
                       </td>
                       <td class="project_progress">
+                        {% if bgr_task.status == 'success' %}
                           <div class="progress progress-sm">
-                              <div class="progress-bar bg-green" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
+                              <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
                               </div>
                           </div>
                           <small>
-                              100% Complete
+                              100% Complete!
                           </small>
+                        {% elif bgr_task.status == 'processing' %}
+                          <div class="progress progress-sm">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
+                              </div>
+                          </div>
+                          <small>
+                              Task is processing!
+                          </small>
+                        {% elif bgr_task.status == 'failed' %}
+                          <div class="progress progress-sm">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated bg-danger" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
+                              </div>
+                          </div>
+                          <small>
+                              Task is incomplete!
+                          </small>
+                        {% elif bgr_task.status == 'queued' %}
+                          <div class="progress progress-sm">
+                              <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
+                              </div>
+                          </div>
+                          <small>
+                              Task in on wait!
+                          </small>
+                        {% endif %}
+
                       </td>
                       <td class="project-state">
                         {% if bgr_task.status == 'success' %}

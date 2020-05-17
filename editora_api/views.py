@@ -1,11 +1,13 @@
 from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect, Http404
 from django.utils.crypto import get_random_string
 from .models import BGR
 from .bgr import Final
 from .serializers import AdminBGRSerializer, UserBGRSerializer
-from rest_framework import generics
+from rest_framework import generics, parsers
 import cv2
 import os
 from PIL import Image
@@ -30,17 +32,27 @@ def bgr_process(image, name, idstr):
 
 class ListBGR(generics.ListCreateAPIView):
 
-    def perform_create(self, serializer):
-        file_name = str(self.request.FILES['original_image'].name)
-        img = Image.open(self.request.data.get('original_image'))
-        img.save('media/bgr/original/' + file_name)
-        random_str = get_random_string(length=6)
-        serializer.save(owner=self.request.user,
-                        original_image= 'bgr/original/' + file_name
-                       ,modified_image= "bgr/modified/" + random_str + "_" +
-                       file_name, img_id=random_str)
-        bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + file_name,
-                    'name': file_name, 'idstr': random_str})
+    def post(self, request):
+        outputs = []
+        for file in self.request.FILES.getlist('original_image'):
+            new_task = BGR()
+            file_name = str(file.name)
+            img = Image.open(file)
+            img.save('media/bgr/original/' + file_name)
+            random_str = get_random_string(length=6)
+            new_task.owner = self.request.user
+            new_task.original_image = 'bgr/original/' + file_name
+            new_task.modified_image = "bgr/modified/" + random_str + "_" + file_name
+            new_task.img_id= random_str
+            new_task.save()
+            bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + file_name,
+                        'name': file_name, 'idstr': random_str})
+            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
+        addresses = {str(os.path.basename(outputs[i])).split('_', 1)[-1]: outputs[i] for i in range(len(outputs))}
+        content = {'Message': 'Your task is successfully queued on editora.',
+                   'outputs': addresses,
+                   }
+        return Response(content, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         if self.request.user.is_staff:

@@ -192,6 +192,8 @@
         <div class="card-header">
           <h3 class="card-title">Recent Tasks</h3>
           <div class="card-tools">
+            <button type="button" class="btn btn-tool" id="refresh-btn-task"  title="Refresh">
+              <i class="fas fa-sync"></i></button>
             <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
               <i class="fas fa-minus"></i></button>
             <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
@@ -252,7 +254,15 @@
                           </small>
                       </td>
                       <td class="project-state">
+                        {% if bgr_task.status == 'success' %}
                           <span class="badge badge-success">Success</span>
+                        {% elif bgr_task.status == 'processing' %}
+                          <span class="badge badge-info">Processing</span>
+                        {% elif bgr_task.status == 'failed' %}
+                          <span class="badge badge-danger">Failed</span>
+                        {% elif bgr_task.status == 'queued' %}
+                          <span class="badge badge-warning">Queued</span>
+                        {% endif %}
                       </td>
                       <td class="project-actions text-right">
                           <a class="btn btn-warning btn-sm" download href='/media/{{ bgr_task.modified_image }}' target='blank'>

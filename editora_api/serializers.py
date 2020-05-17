@@ -7,7 +7,12 @@ from .models import BGR
 
 
 class AdminBGRSerializer(serializers.ModelSerializer):
-
+    """
+    original_image = serializers.ListField(
+                                child=serializers.ImageField(max_length=100000,
+                                                  allow_null=False,)
+    )
+    """
     class Meta:
         model = BGR
         fields = ('id', 'img_id', 'status', 'owner', 'original_image', 'modified_image',

@@ -252,7 +252,7 @@
                       <td>
                           <div>Background Removal</div>
                       </td>
-                      <td class="project_progress">
+                      <td class="project_progress d-none d-sm-table-cell">
                         {% if bgr_task.status == 'success' %}
                           <div class="progress progress-sm">
                               <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
@@ -311,7 +311,6 @@
                               Delete
                           </a>
                       </td>
-                  </tr>
                   </tr>
               </tbody>
                 {% empty %}

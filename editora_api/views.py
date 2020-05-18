@@ -40,16 +40,16 @@ class ListBGR(generics.ListCreateAPIView):
             new_task = BGR()
             file_name = str(file.name)
             img = Image.open(file)
-            img.save('media/bgr/original/' + file_name)
             random_str = get_random_string(length=6)
+            img.save('media/bgr/original/' + random_str + "_" + file_name)
             new_task.owner = self.request.user
-            new_task.original_image = 'bgr/original/' + file_name
+            new_task.original_image = 'bgr/original/' + random_str + "_" + file_name
             new_task.modified_image = "bgr/modified/" + random_str + "_" + file_name
             new_task.img_id= random_str
             new_task.save()
             outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
             ids.append(new_task.id)
-            bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + file_name,
+            bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
         for i in ids:
             for x in outputs:

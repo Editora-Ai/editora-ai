@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from editora_api.models import BGR
 
 def index(request):
@@ -40,10 +41,27 @@ def bgremoval(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
     company = request.user.company.upper()
-    user_bgr_tasks = BGR.objects.filter(owner=request.user)
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
+    data = {'fullname': fullname, 'name': name,
             'company': company }
     return render(request, 'temp_front/bgr.html', data)
+
+@login_required(login_url="/log-in")
+def tasks(request):
+    fullname = (request.user.firstname + " " + request.user.lastname).title()
+    name = request.user.firstname.title()
+    company = request.user.company.upper()
+    user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
+    paginator = Paginator(user_bgr_tasks, 10)
+    page = request.GET.get('page', 1)
+    try:
+        bgrs = paginator.page(page)
+    except PageNotAnInteger:
+        bgrs = paginator.page(1)
+    except EmptyPage:
+        bgrs = paginator.page(paginator.num_pages)
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': bgrs,
+            'company': company, 'paginator': paginator}
+    return render(request, 'temp_front/tasks.html', data)
 
 @login_required(login_url="/log-in")
 def mylogout(request):

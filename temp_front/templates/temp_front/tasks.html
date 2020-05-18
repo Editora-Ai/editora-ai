@@ -6,17 +6,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta http-equiv="refresh" content="10"/>
+
 
   <title>EditorAai | Dashboard</title>
 
-  <style>
-    .vasat {
-        float:none;
-        margin:0 auto;
-        display: block;
-        text-align: center;
-    }
-  </style>
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href={% static 'temp_front/plugins/fontawesome-free/css/all.min.css' %}>
   <!-- overlayScrollbars -->
@@ -26,6 +20,13 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="icon" href="{% static "temp_front/images/favicon.png" %}">
+  <style>
+    .pagi {
+        display: block;
+        left: 45%;
+        position: absolute;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -81,7 +82,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item has-treeview menu-open">
-            <a href="/dashboard" class="nav-link active">
+            <a href="/dashboard" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -132,7 +133,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="/dashboard/tasks" class="nav-link">
+                <a href="/dashboard/tasks" class="nav-link active">
                   <i class="nav-icon fas fa-edit"></i>
                     <p>
                      Tasks
@@ -161,12 +162,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Dashboard v1.0</h1>
+            <h1 class="m-0 text-dark">Tasks</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard v1.0</li>
+              <li class="breadcrumb-item"><a href="/dashboard">Dashboard v1.0</a></li>
+              <li class="breadcrumb-item active">Tasks</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -179,26 +181,10 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-12">
-
-            <div class="card card-default">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-bullhorn"></i>
-                  Callouts
-                </h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <div class="callout callout-success">
-                  <h5>Welcome to Editora service panel, {{ name }}. <br></h5>
-                  <p>This is the first edition of Editora dashboard. You can try our background removal service by either using the panel or the API. Our current service does not include image denoising, super resolution, and classification.</p>
-                </div>
-                </div>
-              </div>
               <!-- /.card-body -->
               <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Recent Tasks</h3>
+          <h3 class="card-title">Number of tasks: {{ paginator.count }}</h3>
           <div class="card-tools">
             <button type="button" class="btn btn-tool" id="refresh-btn-task"  title="Refresh">
               <i class="fas fa-sync"></i></button>
@@ -242,7 +228,7 @@
                       </td>
                       <td>
                           <a>
-                             {{ bgr_task.original_filename|slice:"7:"|truncatechars:14  }}
+                             {{ bgr_task.original_filename|slice:"7:"|truncatechars:14 }}
                           </a>
                           <br/>
                           <small>
@@ -322,9 +308,46 @@
                   </tr>
                 {% endfor %}
           </table>
+
         </div>
         <!-- /.card-body -->
+
       </div>
+<nav class="pagi" aria-label="Page navigation example" >
+
+                    <ul class="pagination">
+
+                        <li class="page-item">
+
+                            {% if bgr_tasks.has_previous %}
+                            <a class="page-link" href="?page={{bgr_tasks.previous_page_number}}">Previous</a>
+
+                            {% endif %}
+
+                        </li>
+
+                        <li class="page-item">
+
+                            <a class="page-link">Page {{bgr_tasks.number}} of {{bgr_tasks.paginator.num_pages}}</a>
+
+                        </li>
+
+
+                    <li class="page-item">
+
+                            {% if bgr_tasks.has_next %}
+                            <a class="page-link" href="?page={{bgr_tasks.next_page_number}}">Next</a>
+
+                            {% endif %}
+
+                        </li>
+
+
+                    </ul>
+
+
+
+                </nav>
       <!-- /.card -->
             </div>
             <!-- /.card -->
@@ -337,9 +360,9 @@
         <!-- END ALERTS AND CALLOUTS -->
         <!-- Info boxes -->
       </div><!--/. container-fluid -->
+
     </section>
     <!-- /.content -->
-
   </div>
   <!-- /.content-wrapper -->
 
@@ -381,5 +404,6 @@
 
 <!-- PAGE SCRIPTS -->
 <script src={% static "temp_front/dist/js/pages/dashboard2.js" %}></script>
+
 </body>
 </html>

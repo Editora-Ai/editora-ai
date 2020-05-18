@@ -31,7 +31,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '94.182.189.110']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '94.182.189.110', 'editoraai.ir', 'www.editoraai.ir']
 
 
 # Application definition
@@ -177,3 +177,5 @@ REST_AUTH_REGISTER_SERIALIZERS = {
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')

@@ -20,13 +20,6 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="icon" href="{% static "temp_front/images/favicon.png" %}">
-  <style>
-    .pagi {
-        display: block;
-        left: 40%;
-        position: absolute;
-    }
-  </style>
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -314,9 +307,9 @@
 
       </div>
       {% if bgr_tasks.paginator.num_pages > 1 %}
-                <nav class="pagi" aria-label="Page navigation example" >
+                <nav aria-label="Page navigation example" >
 
-                    <ul class="pagination">
+                    <ul class="pagination justify-content-center">
 
                         <li class="page-item">
 

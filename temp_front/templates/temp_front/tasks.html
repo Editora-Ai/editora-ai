@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta http-equiv="refresh" content="10"/>
+  <meta http-equiv="refresh" content="20"/>
 
 
   <title>EditorAai | Dashboard</title>
@@ -23,7 +23,7 @@
   <style>
     .pagi {
         display: block;
-        left: 45%;
+        left: 40%;
         position: absolute;
     }
   </style>
@@ -313,7 +313,8 @@
         <!-- /.card-body -->
 
       </div>
-<nav class="pagi" aria-label="Page navigation example" >
+      {% if bgr_tasks.paginator.num_pages > 1 %}
+                <nav class="pagi" aria-label="Page navigation example" >
 
                     <ul class="pagination">
 
@@ -321,7 +322,6 @@
 
                             {% if bgr_tasks.has_previous %}
                             <a class="page-link" href="?page={{bgr_tasks.previous_page_number}}">Previous</a>
-
                             {% endif %}
 
                         </li>
@@ -344,10 +344,8 @@
 
 
                     </ul>
-
-
-
                 </nav>
+      {% endif %}
       <!-- /.card -->
             </div>
             <!-- /.card -->

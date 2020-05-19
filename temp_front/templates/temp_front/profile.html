@@ -15,10 +15,15 @@
   <link rel="stylesheet" href={% static "temp_front/plugins/overlayScrollbars/css/OverlayScrollbars.min.css" %}>
   <!-- Theme style -->
   <link rel="stylesheet" href={% static "temp_front/dist/css/adminlte.min.css" %}>
-  <link rel="stylesheet" href={% static "temp_front/dist/css/upload.css" %}>
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="icon" href="{% static "temp_front/images/favicon.png" %}">
+  <style>
+    .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #dc3545;
+    }
+  </style>
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -69,7 +74,7 @@
       </div>
 
       <!-- Sidebar Menu -->
-<nav class="mt-2">
+      <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
@@ -83,7 +88,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="/dashboard/bgremoval" class="nav-link active">
+                <a href="/dashboard/bgremoval" class="nav-link">
              <i class="nav-icon far fa-circle text-danger"></i>
                   <p>Background Removal</p>
                 </a>
@@ -110,7 +115,7 @@
           </li>
           </li>
           <li class="nav-item has-treeview menu-open">
-            <a href="/dashboard/account" class="nav-link">
+            <a href="/dashboard/account" class="nav-link  active">
               <i class="nav-icon fas nav-icon fas fa-user-circle"></i>
               <p>
                 Profile
@@ -148,99 +153,180 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0 text-dark">Background Removal</h1>
+            <h1 class="m-0 text-dark">Profile overview</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
               <li class="breadcrumb-item"><a href="/dashboard">Dashboard v1.0</a></li>
-              <li class="breadcrumb-item active">Background Removal</li>
+              <li class="breadcrumb-item active">Account</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
-
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-3">
 
-            <div class="card card-default">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-bullhorn"></i>
-                  Callouts
-                </h3>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body">
-                <div class="callout callout-success">
-                  <h5>Remove Background In 20 Seconds!<br></h5>
-                  <p>Detecting and removing background from product images automatically. You can use this service for your e-commerce images! <br>
-                  We used artificial intelligence to detect and remove background of product images. At this moment our service is specialized for e-commerce photos. In the future you can remove background of all images by using editorAai!
-                  </p>
+            <!-- Profile Image -->
+            <div class="card card-danger card-outline">
+              <div class="card-body box-profile">
+                <div class="text-center">
+                  <img class="profile-user-img img-fluid img-circle"
+                       src={% static "temp_front/dist/img/user2-160x160.jpg" %}
+                       alt="User profile picture">
                 </div>
-                </div>
+
+                <h3 class="profile-username text-center">{{ fullname }}</h3>
+
+                <p class="text-muted text-center">{{ company }}</p>
+
+                <ul class="list-group list-group-unbordered mb-3">
+                  <li class="list-group-item">
+                    <b>All Tasks</b> <a class="float-right">{{ bgr_tasks|length }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Successful Tasks</b> <a class="float-right">{{ success_tasks|length }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Background Removal Tasks</b> <a class="float-right">{{ bgr_tasks|length }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Denoising Tasks</b> <a class="float-right">0</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Super Resolution Tasks</b> <a class="float-right">0</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Labelling Tasks</b> <a class="float-right">0</a>
+                  </li>
+                </ul>
+
+                <a href="/#contact" class="btn btn-danger btn-block"><b>Send feedback</b></a>
               </div>
               <!-- /.card-body -->
-              <div class="card">
-        <div class="card-header">
-          <h3 class="card-title">Upload Field</h3>
-          <div class="card-tools">
-            <button type="button" class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse">
-              <i class="fas fa-minus"></i></button>
-            <button type="button" class="btn btn-tool" data-card-widget="remove" data-toggle="tooltip" title="Remove">
-              <i class="fas fa-times"></i></button>
-          </div>
-        </div>
-        <div class="card-body p-0">
-        <form action="" mehtod="post" id="form_upload" enctype="multipart/form-data">
-          {% csrf_token %}
-          <main class="main_full">
-            <div class="container">
-              <div class="panel">
-                <div class="button_outer">
-                  <div class="btn_upload" id="submmiter" name="submid">
-                    <input type="file" multiple id="upload_file" name="original_image">
-                    Upload Images
-                  </div>
-                  <div class="progress" style="">
-                    <div class="progress-bar bg-danger progress-bar-striped
-                    progress-bar-animated active" role="progressbar"
-                    aria-valuemin="0" aria-valuemax="100" style="width:0%; height: 10px;">
-                    0%
-                    </div>
-                    </div>
-                  <div class="success_box"></div>
-                </div>
-              </div>
-              <div class="error_msg"></div>
-              <div class="uploaded_file_view" id="uploaded_view">
-                <span class="file_remove">X</span>
-              </div>
-            </div>
-          </main>
-        </form>
-        <!-- /.card-body -->
-      </div>
-      <!-- /.card -->
             </div>
             <!-- /.card -->
 
-          </div>
+            <!-- About Me Box -->
 
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-9">
+            <div class="card">
+              <div class="card-header p-2">
+                <ul class="nav nav-pills">
+                  <li class="nav-item"><a class="nav-link nav-link-danger active" href="#activity" data-toggle="tab">Overview</a></li>
+                  <li class="nav-item"><a class="nav-link" href="#edit" data-toggle="tab">Edit</a></li>
+                </ul>
+              </div><!-- /.card-header -->
+              <div class="card-body">
+                <div class="tab-content">
+                  <div class="active tab-pane" id="activity">
+
+                    <!-- Post -->
+                    <div class="post clearfix">
+                      <div class="user-block">
+                        <div class="form-group row">
+                        <label for="inputjName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input disabled type="email" class="form-control" id="inputjName" placeholder="{{ name }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputjName2" class="col-sm-2 col-form-label">Lastname</label>
+                        <div class="col-sm-10">
+                          <input disabled type="text" class="form-control" id="inputjName2" placeholder="{{ last }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputjEmail" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <input disabled type="email" class="form-control" id="inputjEmail" placeholder="{{ email }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputjCompany" class="col-sm-2 col-form-label">Company</label>
+                        <div class="col-sm-10">
+                          <input disabled type="text" class="form-control" id="inputjCompany" placeholder="{{ company }}">
+                        </div>
+                      </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="tab-pane" id="edit">
+                    <form id="user_edit" class="form-horizontal">
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputName" name="firstname" value="{{ name }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputName2" class="col-sm-2 col-form-label">Lastname</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputName2" name="lastname" value="{{ last }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                        <div class="col-sm-10">
+                          <input type="email" class="form-control" id="inputEmail" name="email" value="{{ email }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="inputCompany" class="col-sm-2 col-form-label">Company</label>
+                        <div class="col-sm-10">
+                          <input type="text" class="form-control" id="inputCompany" name="company" value="{{ company }}">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="offset-sm-2 col-sm-10">
+
+                          <button id="frmbtn" type="button" class="btn btn-danger">Submit</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <!-- /.tab-pane -->
+                </div>
+                <!-- /.tab-content -->
+              </div><!-- /.card-body -->
+
+            </div>
+            <!-- /.nav-tabs-custom -->
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">About Editora</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+
+                <p class="text-muted">editorA is an AI-powered service that edits images. With editoraAi you don't have to spend much time editing photos.</p>
+
+                <hr>
+
+                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
+
+                <p class="text-muted">Azadi Innovation Factory, Tehran, Iran</p>
+
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
           <!-- /.col -->
         </div>
         <!-- /.row -->
-        <!-- END ALERTS AND CALLOUTS -->
-        <!-- Info boxes -->
-      </div><!--/. container-fluid -->
+      </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-
   </div>
   <!-- /.content-wrapper -->
 
@@ -279,11 +365,10 @@
 <script src={% static "temp_front/plugins/jquery-mousewheel/jquery.mousewheel.js" %}></script>
 <script src={% static "temp_front/plugins/raphael/raphael.min.js" %}></script>
 <script src={% static "temp_front/plugins/jquery-mapael/jquery.mapael.min.js" %}></script>
-<script src={% static "temp_front/plugins/jquery-mapael/maps/usa_states.min.js" %}></script>
-<!-- ChartJS -->
-<script src={% static "temp_front/plugins/chart.js/Chart.min.js" %}></script>
+
 <!-- PAGE SCRIPTS -->
 <script src={% static "temp_front/dist/js/pages/dashboard2.js" %}></script>
-<script src={% static "temp_front/dist/js/upload.js" %}></script>
+<script src={% static "temp_front/dist/js/edit_user.js" %}></script>
+
 </body>
 </html>

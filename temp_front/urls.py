@@ -12,4 +12,5 @@ urlpatterns = [
     path('dashboard/', views.dashboard, name='dashboard'),
     path('dashboard/bgremoval', views.bgremoval, name='bgremoval'),
     path('dashboard/tasks', views.tasks, name='tasks'),
+    path('dashboard/account', views.account, name="account"),
 ]

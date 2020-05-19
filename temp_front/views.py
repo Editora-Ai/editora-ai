@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
@@ -7,7 +9,18 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from editora_api.models import BGR
 
+
 def index(request):
+    if request.method == 'POST':
+        data = request.POST.copy()
+        from_email = data.get('from_email')
+        message = data.get('message')
+        message = message + "  " + "Sender: " + from_email
+        send_mail(subject="Service Feedback",
+                    from_email=from_email,
+                    message=message,
+                    recipient_list=['editoraaiteam@gmail.com'],
+                    )
     return render(request, 'temp_front/index.html')
 
 

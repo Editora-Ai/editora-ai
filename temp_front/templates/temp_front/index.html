@@ -455,14 +455,15 @@
                         </p>
 
                         <!-- Newsletter Form -->
-                        <form id="newsletterForm" data-toggle="validator" data-focus="false">
+                        <form method="post" id="newsletterForm" data-toggle="validator" data-focus="false">
+                        {% csrf_token %}
                             <div class="form-group">
-                                <input type="email" class="form-control-input" id="nemail" required>
+                                <input type="email" class="form-control-input" name="from_email" id="nemail" required>
                                 <label class="label-control" for="nemail">Email</label>
                                 <div class="help-block with-errors"></div>
                             </div>
                             <div>
-                                <textarea name="item3" cols="50" rows="10" placeholder="Message" class="form-control-input"></textarea>
+                                <textarea cols="50" rows="10" placeholder="Message" name="message" class="form-control-input"></textarea>
                             </div>
                             <div class="form-group-button">
                                 <button type="submit" class="form-control-submit-button">Send Message</button>

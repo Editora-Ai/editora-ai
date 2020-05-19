@@ -42,7 +42,10 @@ def signup(request):
 def dashboard(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
-    company = request.user.company.upper()
+    if request.user.company is not None:
+        company = request.user.company.upper()
+    else:
+        company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')[:5]
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
             'company': company}
@@ -53,7 +56,10 @@ def dashboard(request):
 def bgremoval(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
-    company = request.user.company.upper()
+    if request.user.company is not None:
+        company = request.user.company.upper()
+    else:
+        company = " "
     data = {'fullname': fullname, 'name': name,
             'company': company }
     return render(request, 'temp_front/bgr.html', data)
@@ -62,7 +68,10 @@ def bgremoval(request):
 def tasks(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()
-    company = request.user.company.upper()
+    if request.user.company is not None:
+        company = request.user.company.upper()
+    else:
+        company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
     paginator = Paginator(user_bgr_tasks, 10)
     page = request.GET.get('page', 1)
@@ -82,7 +91,10 @@ def account(request):
     name = request.user.firstname.title()
     lastname = request.user.lastname.title()
     email = request.user.email
-    company = request.user.company.upper()
+    if request.user.company is not None:
+        company = request.user.company.upper()
+    else:
+        company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
     success_tasks = user_bgr_tasks.filter(status="success")
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,

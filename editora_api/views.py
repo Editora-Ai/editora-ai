@@ -19,7 +19,7 @@ def bgr_process(image, name, idstr):
     obj = BGR.objects.get(img_id=idstr)
     obj.status = "processing"
     obj.save()
-    img = Image.open(image)
+    img = cv2.imread(image)
     modified_img = Final(img)
     cv2.imwrite("media/bgr/modified/" + idstr + "_" + name, modified_img)
     obj.status = "success"

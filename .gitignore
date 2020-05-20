@@ -4,6 +4,10 @@
 ### Media ###
 media/
 
+### deploy ###
+log/
+static/
+dfsdf
 ### BGR models ###
 train_data/
 

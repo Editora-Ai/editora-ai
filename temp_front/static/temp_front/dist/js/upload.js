@@ -16,10 +16,11 @@ var btnUpload = $("#upload_file"),
 		};
 		$.ajax({
 			xhr: function() {
-                var xhr = new window.XMLHttpRequest();
+				var xhr = new window.XMLHttpRequest();
                 xhr.upload.addEventListener("progress", function(evt) {
                     if (evt.lengthComputable) {
-                        var percentComplete = evt.loaded / evt.total;
+						var percentComplete = evt.loaded / evt.total;
+						$('.progress').prop('hidden', false);
 						$('.progress-bar').width(percentComplete *100+'%');
 						$('.progress-bar').html("Uploading files " +(percentComplete *100).toFixed(0)+'%');                    }
                 }, false);

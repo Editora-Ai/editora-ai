@@ -47,8 +47,10 @@ def dashboard(request):
     else:
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')[:5]
+    remaining_bgrs = user_bgr_tasks.exclude(status="success")
+    remaining_bgrs = len(remaining_bgrs)
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
-            'company': company}
+            'company': company, 'remaining_bgrs': remaining_bgrs}
 
     return render(request, 'temp_front/dashboard.html', data)
 

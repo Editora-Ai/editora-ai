@@ -73,6 +73,8 @@ def tasks(request):
     else:
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
+    remaining_bgrs = user_bgr_tasks.exclude(status="success")
+    remaining_bgrs = len(remaining_bgrs)
     paginator = Paginator(user_bgr_tasks, 10)
     page = request.GET.get('page', 1)
     try:
@@ -82,7 +84,7 @@ def tasks(request):
     except EmptyPage:
         bgrs = paginator.page(paginator.num_pages)
     data = {'fullname': fullname, 'name': name, 'bgr_tasks': bgrs,
-            'company': company, 'paginator': paginator}
+            'company': company, 'paginator': paginator, 'remaining_bgrs': remaining_bgrs}
     return render(request, 'temp_front/tasks.html', data)
 
 @login_required(login_url="/log-in")

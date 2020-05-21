@@ -190,7 +190,7 @@ EMAIL_PORT = env('EMAIL_PORT')
 if DEBUG == False:
     CORS_REPLACE_HTTPS_REFERER      = env('CORS_REPLACE_HTTPS_REFERER')
     HOST_SCHEME                     = env('HOST_SCHEME')
-    SECURE_PROXY_SSL_HEADER         = (env('SPSHF'), env('SPSHs'))
+    SECURE_PROXY_SSL_HEADER         = (env('SPSHF'), env('SPSHS'))
     SECURE_SSL_REDIRECT             = env('SECURE_SSL_REDIRECT')
     SESSION_COOKIE_SECURE           = env('SESSION_COOKIE_SECURE')
     CSRF_COOKIE_SECURE              = env('CSRF_COOKIE_SECURE')

@@ -207,7 +207,7 @@
         </div>
         <div class="card-body p-0">
           <table class="table table-striped projects">
-          {% if bgr_tasks|slice:":2"|length > 0 %}
+          {% if bgr_tasks|length > 0 %}
               <thead>
                   <tr>
                       <th style="width: 1%">
@@ -231,7 +231,7 @@
               </thead>
             {% else %}
             {% endif %}
-              {% for bgr_task in bgr_tasks %}
+              {% for bgr_task in bgr_tasks|slice:":5" %}
               <tbody id="{{ bgr_task.id }}">
                   <tr>
                       <td id="task_id">

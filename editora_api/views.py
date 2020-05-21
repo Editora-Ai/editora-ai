@@ -9,8 +9,8 @@ from .bgr import Final
 from .serializers import AdminBGRSerializer, UserBGRSerializer
 from rest_framework import generics, parsers
 import cv2
+import numpy
 import os
-from PIL import Image
 from editora_service.celery import app
 
 
@@ -38,9 +38,9 @@ class ListBGR(generics.ListCreateAPIView):
         for file in self.request.FILES.getlist('original_image'):
             new_task = BGR()
             file_name = str(file.name)
-            img = Image.open(file)
+            img = cv2.imdecode(numpy.fromstring(file.read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
             random_str = get_random_string(length=6)
-            img.save('media/bgr/original/' + random_str + "_" + file_name)
+            cv2.imwrite('media/bgr/original/' + random_str + "_" + file_name, img)
             new_task.owner = self.request.user
             new_task.original_image = 'bgr/original/' + random_str + "_" + file_name
             new_task.modified_image = "bgr/modified/" + random_str + "_" + file_name
@@ -86,8 +86,10 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
     def perform_destroy(self, instance):
         orig_path = os.path.abspath(instance.original_image.url)
         modif_path = os.path.abspath(instance.modified_image.url)
-        print(orig_path)
-        os.remove(orig_path.strip("/"))
+        try:
+            os.remove(orig_path.strip("/"))
+        except:
+            pass
         try:
             os.remove(modif_path.strip("/"))
         except:

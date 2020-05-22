@@ -256,7 +256,6 @@ def generate_images3(model,input_image):
 #    out = out*0.5 + 0.5
     out = out*255
     out = np.array(out , np.uint8)
-    cv2.imwrite('service_tmp/bgr/bgr_temp.jpg' , out)
     out = cv2.resize(out,dsize = (imwidth,imheight))
 
     return out

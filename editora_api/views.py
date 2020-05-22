@@ -9,7 +9,7 @@ from .bgr import Final
 from .serializers import AdminBGRSerializer, UserBGRSerializer
 from rest_framework import generics, parsers
 import cv2
-import numpy
+import numpy as np
 import os
 from editora_service.celery import app
 
@@ -38,7 +38,24 @@ class ListBGR(generics.ListCreateAPIView):
         for file in self.request.FILES.getlist('original_image'):
             new_task = BGR()
             file_name = str(file.name)
-            img = cv2.imdecode(numpy.fromstring(file.read(), numpy.uint8), cv2.IMREAD_UNCHANGED)
+            img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
+            AVG = np.mean(img)
+            if AVG <185:
+                ALPHA = 1+(185-AVG)/100
+                BETA = 1000/AVG
+                img = np.array(img , np.float32)
+                img *=ALPHA
+                img +=BETA
+                img = np.clip(img, 0 , 255)
+                img = np.array(img , np.uint8)
+            if AVG >232:
+                ALPHA = 1-(AVG-225)/100
+                BETA = -1000/AVG
+                img = np.array(img , np.float32)
+                img *=ALPHA
+                img +=BETA
+                img = np.clip(img, 0 , 255)
+                img = np.array(img , np.uint8)
             random_str = get_random_string(length=6)
             cv2.imwrite('media/bgr/original/' + random_str + "_" + file_name, img)
             new_task.owner = self.request.user

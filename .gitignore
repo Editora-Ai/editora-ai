@@ -10,6 +10,8 @@ log/
 dfsdf
 ### BGR models ###
 train_data/
+train_data_seg/
+train_data_crop/
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

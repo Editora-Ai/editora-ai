@@ -14,8 +14,8 @@ import os
 import time
 import cv2
 
-checkpoint_dir = 'editora_api/train_data_seg'
-checkpoint_dir2 = 'editora_api/train_data_crop'
+checkpoint_dir = 'editora_api/train_data_crop'
+checkpoint_dir2 = 'editora_api/train_data_seg'
 #checkpoint_dir2 = 'E:/pix2pix saved models/sV'
 const=7
 BUFFER_SIZE = 200

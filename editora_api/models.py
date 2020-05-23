@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 import ntpath
 import datetime
+import os
 
 
 
@@ -38,4 +39,4 @@ class BGR(models.Model):
         return ntpath.basename(self.modified_image)
 
     def __str__(self):
-        return str(self.owner)
+        return (str(self.owner.firstname) + " " + str(self.owner.lastname) + " | " +  str(os.path.basename(str(self.original_image))))  + " | " + str(self.status)

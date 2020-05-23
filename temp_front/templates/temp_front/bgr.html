@@ -19,6 +19,7 @@
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
   <link rel="icon" href="{% static "temp_front/images/favicon.png" %}">
+  <link rel="stylesheet" href={% static "temp_front/plugins/ekko-lightbox/ekko-lightbox.css" %}>
 </head>
 <body class="hold-transition sidebar-mini sidebar-collapse layout-navbar-fixed layout-footer-fixed">
 <div class="wrapper">
@@ -196,6 +197,40 @@
                     <!-- /.card-header -->
                     <div class="card-body">
                       At this moment our service is specialized for e-commerce photos. To get the best output of our background removal service you need to use images that taken in photography studios.
+                      <hr>
+                      <div class="col-12">
+                        <div class="card card-success">
+                          <div class="card-header">
+                            <div class="card-title">
+                              Sample images
+                            </div>
+                          </div>
+                          <div class="card-body">
+                            <div class="row justify-content-center align-items-center">
+                              <div class="col-sm-2">
+                                <a href={% static "/samples/1-min.jpg" %} data-toggle="lightbox" data-title="sample 1" data-gallery="gallery">
+                                  <img src={% static "/samples/1-min.jpg" %} class="img-fluid mb-2 img-thumbnail" alt="sample 1"/>
+                                </a>
+                              </div>
+                              <div class="col-sm-2">
+                                <a href={% static "/samples/2-min.jpg" %} data-toggle="lightbox" data-title="sample 2" data-gallery="gallery">
+                                  <img src={% static "/samples/2-min.jpg" %} class="img-fluid mb-2 img-thumbnail" alt="sample 2"/>
+                                </a>
+                              </div>
+                              <div class="col-sm-2">
+                                <a href={% static "/samples/3-min.jpg" %} data-toggle="lightbox" data-title="sample 3" data-gallery="gallery">
+                                  <img src={% static "/samples/3-min.jpg" %} class="img-fluid mb-2 img-thumbnail" alt="sample 3"/>
+                                </a>
+                              </div>
+                              <div class="col-sm-2">
+                                <a href={% static "/samples/4-min.jpg" %} data-toggle="lightbox" data-title="sample 4" data-gallery="gallery">
+                                  <img src={% static "/samples/4-min.jpg" %} class="img-fluid mb-2 img-thumbnail" alt="sample 4"/>
+                                </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -287,6 +322,8 @@
 <!-- AdminLTE App -->
 <script src={% static "temp_front/dist/js/adminlte.js" %}></script>
 
+<script src={% static "temp_front/plugins/ekko-lightbox/ekko-lightbox.min.js" %}></script>
+
 <!-- OPTIONAL SCRIPTS -->
 <script src={% static "temp_front/dist/js/demo.js" %}></script>
 
@@ -299,5 +336,20 @@
 <!-- PAGE SCRIPTS -->
 <script src={% static "temp_front/dist/js/pages/dashboard2.js" %}></script>
 <script src={% static "temp_front/dist/js/upload.js" %}></script>
+
+<script>
+  $(function () {
+    $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+      event.preventDefault();
+      $(this).ekkoLightbox({
+        alwaysShowClose: true
+      });
+    });
+    $('.btn[data-filter]').on('click', function() {
+      $('.btn[data-filter]').removeClass('active');
+      $(this).addClass('active');
+    });
+  })
+</script>
 </body>
 </html>

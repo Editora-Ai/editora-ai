@@ -6,7 +6,7 @@ media/
 
 ### deploy ###
 log/
-static/
+/static/
 dfsdf
 ### BGR models ###
 train_data/

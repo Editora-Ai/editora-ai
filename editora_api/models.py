@@ -39,4 +39,4 @@ class BGR(models.Model):
         return ntpath.basename(self.modified_image)
 
     def __str__(self):
-        return (str(self.owner.firstname) + " " + str(self.owner.lastname) + " | " +  str(os.path.basename(str(self.original_image))))  + " | " + str(self.status)
+        return (str(self.date_created) + " | " + str(self.owner.firstname) + " " + str(self.owner.lastname) + " | " +  str(os.path.basename(str(self.original_image))))  + " | " + str(self.status)

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'rest_auth.registration',
     'drf_yasg',
+    'easyaudit',
 
     # Local
     'editora_api',
@@ -68,6 +69,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'easyaudit.middleware.easyaudit.EasyAuditMiddleware',
 ]
 
 ROOT_URLCONF = 'editora_service.urls'

@@ -12,6 +12,7 @@ dfsdf
 train_data/
 train_data_seg/
 train_data_crop/
+locustfile.py
 
 ### Python ###
 # Byte-compiled / optimized / DLL files

@@ -5,7 +5,6 @@ from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect, Http404
 from django.utils.crypto import get_random_string
 from .models import BGR
-from .bgr import Final
 from .serializers import AdminBGRSerializer, UserBGRSerializer
 from rest_framework import generics, parsers
 import cv2
@@ -16,6 +15,7 @@ from editora_service.celery import app
 
 @app.task
 def bgr_process(image, name, idstr):
+    from .bgr import Final
     obj = BGR.objects.get(img_id=idstr)
     obj.status = "processing"
     obj.save()

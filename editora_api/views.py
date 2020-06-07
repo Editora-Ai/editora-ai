@@ -142,23 +142,6 @@ class ListFR(generics.ListCreateAPIView):
             new_task = FR()
             file_name = str(file.name)
             img = cv2.imdecode(np.fromstring(file.read(), np.uint8), cv2.IMREAD_UNCHANGED)
-            AVG = np.mean(img)
-            if AVG <185:
-                ALPHA = 1+(185-AVG)/100
-                BETA = 1000/AVG
-                img = np.array(img , np.float32)
-                img *=ALPHA
-                img +=BETA
-                img = np.clip(img, 0 , 255)
-                img = np.array(img , np.uint8)
-            if AVG >232:
-                ALPHA = 1-(AVG-225)/100
-                BETA = -1000/AVG
-                img = np.array(img , np.float32)
-                img *=ALPHA
-                img +=BETA
-                img = np.clip(img, 0 , 255)
-                img = np.array(img , np.uint8)
             random_str = get_random_string(length=6)
             cv2.imwrite('media/fr/original/' + random_str + "_" + file_name, img)
             new_task.owner = self.request.user

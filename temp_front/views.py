@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from itertools import chain
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail, BadHeaderError
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from editora_api.models import BGR
+from editora_api.models import BGR, FR
 
 
 def index(request):
@@ -47,9 +48,17 @@ def dashboard(request):
     else:
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
+    user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    all_tasks = list(
+        sorted(
+            chain(user_bgr_tasks, user_fr_tasks),
+            key=lambda objects: objects.date_created,
+            reverse=True
+        )
+    ) 
     remaining_bgrs = user_bgr_tasks.exclude(status="success")
     remaining_bgrs = len(remaining_bgrs)
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
+    data = {'fullname': fullname, 'name': name, 'tasks': all_tasks,
             'company': company, 'remaining_bgrs': remaining_bgrs}
 
     return render(request, 'temp_front/dashboard.html', data)
@@ -87,17 +96,25 @@ def tasks(request):
     else:
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
+    user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    all_tasks = list(
+        sorted(
+            chain(user_bgr_tasks, user_fr_tasks),
+            key=lambda objects: objects.date_created,
+            reverse=True
+        )
+    ) 
     remaining_bgrs = user_bgr_tasks.exclude(status="success")
     remaining_bgrs = len(remaining_bgrs)
-    paginator = Paginator(user_bgr_tasks, 10)
+    paginator = Paginator(all_tasks, 10)
     page = request.GET.get('page', 1)
     try:
-        bgrs = paginator.page(page)
+        tasks = paginator.page(page)
     except PageNotAnInteger:
-        bgrs = paginator.page(1)
+        tasks = paginator.page(1)
     except EmptyPage:
-        bgrs = paginator.page(paginator.num_pages)
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': bgrs,
+        tasks = paginator.page(paginator.num_pages)
+    data = {'fullname': fullname, 'name': name, 'tasks': tasks,
             'company': company, 'paginator': paginator, 'remaining_bgrs': remaining_bgrs}
     return render(request, 'temp_front/tasks.html', data)
 

@@ -1,4 +1,5 @@
 {% load static %}
+{% load tasks_filter %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -190,7 +191,7 @@
         </div>
         <div class="card-body p-0">
           <table class="table table-striped projects">
-          {% if bgr_tasks|slice:":2"|length > 0 %}
+          {% if tasks|slice:":2"|length > 0 %}
               <thead>
                   <tr>
                       <th style="width: 1%">
@@ -214,26 +215,30 @@
               </thead>
             {% else %}
             {% endif %}
-              {% for bgr_task in bgr_tasks %}
-              <tbody id="{{ bgr_task.id }}">
+              {% for task in tasks %}
+              <tbody id="{{ task.id }}">
                   <tr>
                       <td id="task_id">
-                          {{ bgr_task.id }}
+                          {{ task.id }}
                       </td>
                       <td>
                           <a>
-                             {{ bgr_task.original_filename|slice:"7:"|truncatechars:14 }}
+                             {{ task.original_filename|slice:"7:"|truncatechars:14 }}
                           </a>
                           <br/>
                           <small>
-                              {{ bgr_task.date_created }}
+                              {{ task.date_created }}
                           </small>
                       </td>
                       <td class=" d-none d-sm-table-cell">
+                          {% if "FR" ==  task|to_class_name %}
+                          <div>Face Removal</div>
+                          {% elif "BGR" ==  task|to_class_name %}
                           <div>Background Removal</div>
+                          {% endif %}
                       </td>
                       <td class="project_progress d-none d-sm-table-cell">
-                        {% if bgr_task.status == 'success' %}
+                        {% if task.status == 'success' %}
                           <div class="progress progress-sm">
                               <div class="progress-bar progress-bar-striped bg-success" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
                               </div>
@@ -241,7 +246,7 @@
                           <small>
                               100% Complete!
                           </small>
-                        {% elif bgr_task.status == 'processing' %}
+                        {% elif task.status == 'processing' %}
                           <div class="progress progress-sm">
                               <div class="progress-bar progress-bar-striped progress-bar-animated bg-info" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
                               </div>
@@ -249,7 +254,7 @@
                           <small>
                               Task is processing!
                           </small>
-                        {% elif bgr_task.status == 'failed' %}
+                        {% elif task.status == 'failed' %}
                           <div class="progress progress-sm">
                               <div class="progress-bar progress-bar-striped bg-danger" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
                               </div>
@@ -257,7 +262,7 @@
                           <small>
                               Task is incomplete!
                           </small>
-                        {% elif bgr_task.status == 'queued' %}
+                        {% elif task.status == 'queued' %}
                           <div class="progress progress-sm">
                               <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar" aria-volumenow="57" aria-volumemin="0" aria-volumemax="100" style="width: 100%">
                               </div>
@@ -269,31 +274,31 @@
 
                       </td>
                       <td class="project-state">
-                        {% if bgr_task.status == 'success' %}
+                        {% if task.status == 'success' %}
                           <span class="badge badge-success">Success</span>
-                        {% elif bgr_task.status == 'processing' %}
+                        {% elif task.status == 'processing' %}
                           <span class="badge badge-info">Processing</span>
-                        {% elif bgr_task.status == 'failed' %}
+                        {% elif task.status == 'failed' %}
                           <span class="badge badge-danger">Failed</span>
-                        {% elif bgr_task.status == 'queued' %}
+                        {% elif task.status == 'queued' %}
                           <span class="badge badge-warning">Queued</span>
                         {% endif %}
                       </td>
                       <td class="project-actions text-right">
-                      {% if bgr_task.status == "success" %}
-                          <a class="btn btn-warning btn-sm" download href='/media/{{ bgr_task.modified_image }}' target='blank'>
+                      {% if task.status == "success" %}
+                          <a class="btn btn-warning btn-sm" download href='/media/{{ task.modified_image }}' target='blank'>
                               <i class="fas fa-folder">
                               </i>
                               Download
                           </a>
                       {% else %}
-                          <a class="btn btn-warning btn-sm disabled" download href='/media/{{ bgr_task.modified_image }}' target='blank'>
+                          <a class="btn btn-warning btn-sm disabled" download href='/media/{{ task.modified_image }}' target='blank'>
                               <i class="fas fa-folder">
                               </i>
                               Download
                           </a>
                       {% endif %}
-                          <a class="btn btn-danger btn-sm" id="delete_task" name="{{ bgr_task.id }}">
+                          <a class="btn btn-danger btn-sm" id="delete_task" name="{{ task.id }}">
                               <i class="fas fa-trash">
                               </i>
                               Delete
@@ -315,30 +320,30 @@
         <!-- /.card-body -->
 
       </div>
-      {% if bgr_tasks.paginator.num_pages > 1 %}
+      {% if tasks.paginator.num_pages > 1 %}
                 <nav aria-label="Page navigation example" >
 
                     <ul class="pagination justify-content-center">
 
                         <li class="page-item">
 
-                            {% if bgr_tasks.has_previous %}
-                            <a class="page-link" href="?page={{bgr_tasks.previous_page_number}}">Previous</a>
+                            {% if tasks.has_previous %}
+                            <a class="page-link" href="?page={{tasks.previous_page_number}}">Previous</a>
                             {% endif %}
 
                         </li>
 
                         <li class="page-item">
 
-                            <a class="page-link">Page {{bgr_tasks.number}} of {{bgr_tasks.paginator.num_pages}}</a>
+                            <a class="page-link">Page {{tasks.number}} of {{tasks.paginator.num_pages}}</a>
 
                         </li>
 
 
                     <li class="page-item">
 
-                            {% if bgr_tasks.has_next %}
-                            <a class="page-link" href="?page={{bgr_tasks.next_page_number}}">Next</a>
+                            {% if tasks.has_next %}
+                            <a class="page-link" href="?page={{tasks.next_page_number}}">Next</a>
 
                             {% endif %}
 

@@ -3,7 +3,7 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.registration.views import RegisterView
 
 
-from .models import BGR
+from .models import BGR, FR
 
 
 class AdminBGRSerializer(serializers.ModelSerializer):
@@ -19,6 +19,24 @@ class UserBGRSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BGR
+        fields = ('id', 'status', 'original_image', 'modified_image',
+                  'date_created')
+        read_only_fields = ('id', 'status', 'owner', 'img_id' , 'date_created', 'modified_image')
+
+
+class AdminFRSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FR
+        fields = ('id', 'img_id', 'status', 'owner', 'original_image', 'modified_image',
+                  'date_created')
+        read_only_fields = ('id', 'owner', 'img_id', 'date_created', 'modified_image')
+
+
+class UserFRSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FR
         fields = ('id', 'status', 'original_image', 'modified_image',
                   'date_created')
         read_only_fields = ('id', 'status', 'owner', 'img_id' , 'date_created', 'modified_image')

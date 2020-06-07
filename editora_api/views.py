@@ -98,7 +98,7 @@ class DetailBGR(generics.RetrieveUpdateDestroyAPIView):
     def get_serializer_class(self):
         if self.request.user.is_superuser:
             return AdminBGRSerializer
-        return UserBGRSerialize
+        return UserBGRSerializer
 
     def perform_destroy(self, instance):
         """

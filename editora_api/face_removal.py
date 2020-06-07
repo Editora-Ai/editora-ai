@@ -1,8 +1,8 @@
 import cv2
 import numpy as np
 
-prototxt_path = "face_removal/deploy.prototxt.txt"
-model_path = "face_removal/res10_300x300_ssd_iter_140000_fp16.caffemodel"
+prototxt_path = "/home/ragnar/Desktop/editora-ai/editora_api/fr_data/deploy.prototxt.txt"
+model_path = "/home/ragnar/Desktop/editora-ai/editora_api/fr_data/res10_300x300_ssd_iter_140000_fp16.caffemodel"
 
 def face_removal(image):
 	model = cv2.cv2.dnn.readNetFromCaffe(prototxt_path, model_path)

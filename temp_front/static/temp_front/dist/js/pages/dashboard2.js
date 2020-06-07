@@ -196,6 +196,7 @@ $.ajaxSetup({
 
 $(document).on("click", '#delete_task', function(){
   var id = $(this).attr('name');
+  if ($("tbody#".concat(id)).attr('name') == "BGR") {
       $.ajax({
           url: "/api/v1/bgr/".concat(id, '/'),
           type: "DELETE",
@@ -207,6 +208,19 @@ $(document).on("click", '#delete_task', function(){
             $("tbody#".concat(id)).remove()
           }
       });
+  } else if ($("tbody#".concat(id)).attr('name') == "FR"){
+    $.ajax({
+      url: "/api/v1/fr/".concat(id, '/'),
+      type: "DELETE",
+      data: {
+        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+        // plus other data
+      },
+      success: function(text) {
+        $("tbody#".concat(id)).remove()
+      }
+  });
+  }
 });
 
 $(document).on("click", '#refresh-btn-task', function(){

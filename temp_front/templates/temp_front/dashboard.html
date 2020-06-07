@@ -239,7 +239,7 @@
             {% else %}
             {% endif %}
               {% for task in tasks|slice:":5" %}
-              <tbody id="{{ task.id }}">
+              <tbody id="{{ task.id }}" name="{{ task|to_class_name }}">
                   <tr>
                       <td id="task_id">
                           {{ task.id }}

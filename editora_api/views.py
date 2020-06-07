@@ -4,13 +4,13 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect, Http404
 from django.utils.crypto import get_random_string
-from .models import BGR
 from .serializers import AdminBGRSerializer, UserBGRSerializer
 from rest_framework import generics, parsers
+from editora_service.celery import app
 import cv2
 import numpy as np
 import os
-from editora_service.celery import app
+from .models import BGR
 
 
 @app.task

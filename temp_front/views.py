@@ -67,6 +67,18 @@ def bgremoval(request):
     return render(request, 'temp_front/bgr.html', data)
 
 @login_required(login_url="/log-in")
+def faceremoval(request):
+    fullname = (request.user.firstname + " " + request.user.lastname).title()
+    name = request.user.firstname.title()
+    if request.user.company is not None:
+        company = request.user.company.upper()
+    else:
+        company = " "
+    data = {'fullname': fullname, 'name': name,
+            'company': company }
+    return render(request, 'temp_front/fr.html', data)
+
+@login_required(login_url="/log-in")
 def tasks(request):
     fullname = (request.user.firstname + " " + request.user.lastname).title()
     name = request.user.firstname.title()

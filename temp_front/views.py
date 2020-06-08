@@ -129,8 +129,10 @@ def account(request):
     else:
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
-    success_tasks = user_bgr_tasks.filter(status="success")
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks,
+    user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    all_tasks = (user_bgr_tasks.count()) + (user_fr_tasks.count())
+    success_tasks = user_bgr_tasks.filter(status="success").count() + user_fr_tasks.filter(status="success").count()
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks, 'fr_tasks': user_fr_tasks, 'tasks': all_tasks,
             'company': company, 'success_tasks': success_tasks, "last": lastname, "email": email}
 
     return render(request, 'temp_front/profile.html', data)

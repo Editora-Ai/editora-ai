@@ -193,13 +193,16 @@
 
                 <ul class="list-group list-group-unbordered mb-3">
                   <li class="list-group-item">
-                    <b>All Tasks</b> <a class="float-right">{{ bgr_tasks|length }}</a>
+                    <b>All Tasks</b> <a class="float-right">{{ tasks }}</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Successful Tasks</b> <a class="float-right">{{ success_tasks|length }}</a>
+                    <b>Successful Tasks</b> <a class="float-right">{{ success_tasks }}</a>
                   </li>
                   <li class="list-group-item">
-                    <b>Background Removal Tasks</b> <a class="float-right">{{ bgr_tasks|length }}</a>
+                    <b>Background Removal Tasks</b> <a class="float-right">{{ bgr_tasks.count }}</a>
+                  </li>
+                  <li class="list-group-item">
+                    <b>Face Removal Tasks</b> <a class="float-right">{{ fr_tasks.count }}</a>
                   </li>
                   <li class="list-group-item">
                     <b>Denoising Tasks</b> <a class="float-right">0</a>

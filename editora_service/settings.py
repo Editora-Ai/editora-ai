@@ -169,6 +169,8 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 AUTH_USER_MODEL = 'user.User'
 
+ACCOUNT_ADAPTER = "user.allauth.AccountAdapter"
+
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "user.serializers.CustomUserDetailsSerializer",
 }

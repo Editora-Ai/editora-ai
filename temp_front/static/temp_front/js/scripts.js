@@ -175,8 +175,9 @@
         var lastname = $("#lname").val();
         var password = $("#spassword").val();
         var company = $("#company").val();
+        var msgClasses = "h3 text-center";
 
-
+        $("#smsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
         $.ajax({
             type: "POST",
             url: "rest-auth/registration/",

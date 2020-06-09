@@ -49,7 +49,6 @@ urlpatterns = [
     path('rest-auth/registration/',
          include('rest_auth.registration.urls')),
     url(r'^account/', include('allauth.urls')),
-    url(r"^verifyEmail/(?P<key>\w+)/$", confirm_email, name="my_confirm_email"),
     
     # Editoria Service Documentation
    url(r'^api-docs(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),

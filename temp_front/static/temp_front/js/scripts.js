@@ -182,7 +182,7 @@
             url: "rest-auth/registration/",
             data: "email=" + email + "&company=" + company + "&firstname=" + name + "&password1=" + password + "&password2=" + password + "&lastname=" + lastname,
             success: function(text) {
-                sformSuccess("Successfully Registered!");
+                sformSuccess("Successfully Registered. Please check your email to activate your account!");
             },
             error: function(text) {
                 validmailorpass(text.responseText)
@@ -203,7 +203,6 @@
     function sformSuccess(message) {
         var msgClasses = "h3 text-center";
         $("#smsgSubmit").removeClass().addClass(msgClasses).text(message);
-        setTimeout(function(){ window.location = "dashboard/"; }, 500);
     }
 
     function sformError() {

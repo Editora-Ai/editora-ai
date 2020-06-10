@@ -310,7 +310,7 @@
     function resetpasssubmitForm() {
         // initiate variables with form content
         var email = $("#resetemail").val();
-        var msgClasses = "h3 text-center";
+        var msgClasses = "h6 text-center tada animated";
 
         $("#smsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
         $.ajax({
@@ -334,18 +334,18 @@
 
     function resetpasssubmitMSG(valid, msg) {
         if (valid) {
-            var msgClasses = "h3 text-center tada animated";
+            var msgClasses = "h6 text-center tada animated";
         } else {
-            var msgClasses = "h3 text-center";
+            var msgClasses = "h6 text-center";
         }
         $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("A link has been sent to your email!");
     }
 
     function resetpasssubmiterrorMSG(valid, msg) {
         if (valid) {
-            var msgClasses = "h3 text-center tada animated";
+            var msgClasses = "h6 text-center tada animated";
         } else {
-            var msgClasses = "h3 text-center";
+            var msgClasses = "h6 text-center";
         }
         $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("Email is not correct!");
     }

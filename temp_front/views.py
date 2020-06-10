@@ -38,6 +38,10 @@ def signup(request):
     logout(request)
     return render(request, 'temp_front/sign-up.html')
 
+def password_reset(request):
+    if request.user.is_authenticated:
+        return redirect('/dashboard/account')
+    return render(request, 'temp_front/password-reset.html')
 
 @login_required(login_url="/log-in")
 def dashboard(request):

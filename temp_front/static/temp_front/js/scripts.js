@@ -293,6 +293,63 @@
         $("#lmsgSubmit").removeClass().addClass(msgClasses).text("Email or Password is incorrect!");
     }
 
+
+    /* Reset Password Form */
+    $("#resetpassForm").validator().on("submit", function(event) {
+        if (event.isDefaultPrevented()) {
+            // handle the invalid form...
+            resetpassformError();
+            resetpasssubmiterrorMSG(false, "Please fill the email field!");
+        } else {
+            // everything looks good!
+            event.preventDefault();
+            resetpasssubmitForm();
+        }
+    });
+
+    function resetpasssubmitForm() {
+        // initiate variables with form content
+        var email = $("#resetemail").val();
+        var msgClasses = "h3 text-center";
+
+        $("#smsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
+        $.ajax({
+            type: "POST",
+            url: "rest-auth/password/reset/",
+            data: "email=" + email,
+            success: function(text) {
+                resetpasssubmitMSG(text);
+            },
+            error: function(text) {
+                resetpasssubmiterrorMSG(text);
+            }
+        });
+    }
+
+    function resetpassformError() {
+        $("resetpassForm").removeClass().addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass();
+        });
+    }
+
+    function resetpasssubmitMSG(valid, msg) {
+        if (valid) {
+            var msgClasses = "h3 text-center tada animated";
+        } else {
+            var msgClasses = "h3 text-center";
+        }
+        $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("A link has been sent to your email!");
+    }
+
+    function resetpasssubmiterrorMSG(valid, msg) {
+        if (valid) {
+            var msgClasses = "h3 text-center tada animated";
+        } else {
+            var msgClasses = "h3 text-center";
+        }
+        $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("Email is not correct!");
+    }
+
     /* Back To Top Button */
     // create the back to top button
     $('body').prepend('<a href="body" class="back-to-top page-scroll">Back to Top</a>');

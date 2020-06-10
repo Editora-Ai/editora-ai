@@ -23,6 +23,9 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from allauth.account.views import confirm_email
+from rest_auth.views import PasswordResetConfirmView
+from temp_front.views import confirm_email
+
 
 
 admin.autodiscover()
@@ -49,7 +52,9 @@ urlpatterns = [
     path('rest-auth/registration/',
          include('rest_auth.registration.urls')),
     url(r'^account/', include('allauth.urls')),
-    
+    path('rest-auth/password/reset/confirm/<uidb64>/<token>/', confirm_email, name="password_reset_confirm"),
+
+
     # Editoria Service Documentation
    url(r'^api-docs(?P<format>\.json|\.yaml)$', schema_view.without_ui(cache_timeout=0), name='schema-json'),
    url(r'^api-docs/$', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

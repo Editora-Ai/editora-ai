@@ -11,6 +11,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from editora_api.models import BGR, FR
 
 
+def confirm_email(request, uidb64, token):
+    return render(request, 'temp_front/password_reset_confirm.html')
+
 def index(request):
     if request.method == 'POST':
         data = request.POST.copy()

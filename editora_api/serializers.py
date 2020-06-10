@@ -1,8 +1,6 @@
 from rest_framework import serializers, generics
 from rest_auth.registration.serializers import RegisterSerializer
 from rest_auth.registration.views import RegisterView
-
-
 from .models import BGR, FR
 
 
@@ -40,3 +38,5 @@ class UserFRSerializer(serializers.ModelSerializer):
         fields = ('id', 'status', 'original_image', 'modified_image',
                   'date_created')
         read_only_fields = ('id', 'status', 'owner', 'img_id' , 'date_created', 'modified_image')
+
+

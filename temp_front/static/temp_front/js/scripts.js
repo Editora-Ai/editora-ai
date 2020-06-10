@@ -312,7 +312,7 @@
         var email = $("#resetemail").val();
         var msgClasses = "h6 text-center tada animated";
 
-        $("#smsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
+        $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
         $.ajax({
             type: "POST",
             url: "rest-auth/password/reset/",
@@ -348,6 +348,65 @@
             var msgClasses = "h6 text-center";
         }
         $("#resetpassmsgSubmit").removeClass().addClass(msgClasses).text("Email is not correct!");
+    }
+
+
+    /* Reset Password Confirm Form */
+    $("#resetpasswordconfirmForm").validator().on("submit", function(event) {
+        if (event.isDefaultPrevented()) {
+            // handle the invalid form...
+            resetpasswordconfirmError();
+            resetpasswordconfirmsubmiterrorMSG(false, "Please fill the email field!");
+        } else {
+            // everything looks good!
+            event.preventDefault();
+            resetpasswordconfirmsubmitForm();
+        }
+    });
+
+    function resetpasswordconfirmsubmitForm() {
+        // initiate variables with form content
+        var password = $("#resetpasswordconfirm").val();
+        var uuid = location.pathname.split("/")[5]
+        var token = location.pathname.split("/")[6]
+
+        $.ajax({
+            type: "POST",
+            url: "/rest-auth/password/reset/confirm/",
+            data: "new_password1=" + password + "&new_password2=" + password + "&uid=" + uuid + "&token=" + token,
+            success: function(text) {
+                resetpasswordconfirmsubmitMSG(text);
+            },
+            error: function(text) {
+                resetpasswordconfirmsubmiterrorMSG(text);
+            }
+        });
+    }
+
+    function resetpasswordconfirmsubmiterrorMSG() {
+        $("resetpassForm").removeClass().addClass('shake animated').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
+            $(this).removeClass();
+        });
+    }
+
+    function resetpasswordconfirmsubmitMSG(valid, msg) {
+        if (valid) {
+            var msgClasses = "h6 text-center tada animated";
+        } else {
+            var msgClasses = "h6 text-center";
+        }
+        $("#resetpasswordconfirmmsgSubmit").removeClass().addClass(msgClasses).text("Your password is updated!");
+        setTimeout(function(){ window.location = "/log-in"; }, 500);
+
+    }
+
+    function resetpasswordconfirmsubmiterrorMSG(valid, msg) {
+        if (valid) {
+            var msgClasses = "h6 text-center tada animated";
+        } else {
+            var msgClasses = "h6 text-center";
+        }
+        $("#resetpasswordconfirmmsgSubmit").removeClass().addClass(msgClasses).text("Password must contain at least 8 characters and not entirely numeric! also don't try your old password.");
     }
 
     /* Back To Top Button */

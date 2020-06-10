@@ -174,6 +174,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = "editoraAi | "
 
 REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "user.serializers.CustomUserDetailsSerializer",
+    "PASSWORD_RESET_SERIALIZER": "user.serializers.CustomPasswordResetSerializer",
 }
 REST_AUTH_REGISTER_SERIALIZERS = {
     "REGISTER_SERIALIZER": "user.serializers.CustomRegisterSerializer",

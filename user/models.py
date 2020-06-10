@@ -16,6 +16,7 @@ class UserManager(BaseUserManager):
             lastname=lastname,
             company=company,
         )
+        user.is_active = True
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -57,6 +58,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     lastname = models.CharField(max_length=100,  default="havent set")
     company = models.CharField(max_length=100,  default="havent set", null=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     objects = UserManager()

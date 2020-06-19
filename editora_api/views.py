@@ -201,3 +201,12 @@ class DetailFR(generics.RetrieveUpdateDestroyAPIView):
             pass
         """
         instance.delete()
+
+# Getting filtered image
+def get_filtered_image(request, name, is_sensitive):
+    image_name = name
+    if is_sensitive == "true":
+        image_url = FR.objects.get(img_id=name).modified_image
+    else:
+        image_url = FR.objects.get(img_id=name).original_image
+    return HttpResponseRedirect(image_url.url)

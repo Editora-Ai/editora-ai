@@ -206,7 +206,7 @@ class DetailFR(generics.RetrieveUpdateDestroyAPIView):
 def get_filtered_image(request, name, is_sensitive):
     image_name = name
     if is_sensitive == "is_sensitive":
-        image_url = FR.objects.get(img_id=name).original_image
-    elif is_sensitive == "is_not_sensitive":
         image_url = FR.objects.get(img_id=name).modified_image
+    elif is_sensitive == "is_not_sensitive":
+        image_url = FR.objects.get(img_id=name).original_image
     return HttpResponseRedirect(image_url.url)

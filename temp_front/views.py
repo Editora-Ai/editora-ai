@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from editora_api.models import BGR, FR
+from editora_api.models import BGR, FR, PR
 
 
 def confirm_email(request, uidb64, token):
@@ -56,9 +56,10 @@ def dashboard(request):
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
     user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    user_pr_tasks = PR.objects.filter(owner=request.user).order_by('-date_created')   
     all_tasks = list(
         sorted(
-            chain(user_bgr_tasks, user_fr_tasks),
+            chain(user_bgr_tasks, user_fr_tasks, user_pr_tasks),
             key=lambda objects: objects.date_created,
             reverse=True
         )
@@ -116,9 +117,10 @@ def tasks(request):
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
     user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    user_pr_tasks = PR.objects.filter(owner=request.user).order_by('-date_created')   
     all_tasks = list(
         sorted(
-            chain(user_bgr_tasks, user_fr_tasks),
+            chain(user_bgr_tasks, user_fr_tasks, user_pr_tasks),
             key=lambda objects: objects.date_created,
             reverse=True
         )
@@ -149,9 +151,10 @@ def account(request):
         company = " "
     user_bgr_tasks = BGR.objects.filter(owner=request.user).order_by('-date_created')
     user_fr_tasks = FR.objects.filter(owner=request.user).order_by('-date_created')   
+    user_pr_tasks = PR.objects.filter(owner=request.user).order_by('-date_created')   
     all_tasks = (user_bgr_tasks.count()) + (user_fr_tasks.count())
-    success_tasks = user_bgr_tasks.filter(status="success").count() + user_fr_tasks.filter(status="success").count()
-    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks, 'fr_tasks': user_fr_tasks, 'tasks': all_tasks,
+    success_tasks = user_bgr_tasks.filter(status="success").count() + user_fr_tasks.filter(status="success").count() + user_pr_tasks.filter(status="success").count()
+    data = {'fullname': fullname, 'name': name, 'bgr_tasks': user_bgr_tasks, 'fr_tasks': user_fr_tasks, 'pr_tasks': user_pr_tasks, 'tasks': all_tasks,
             'company': company, 'success_tasks': success_tasks, "last": lastname, "email": email}
 
     return render(request, 'temp_front/profile.html', data)

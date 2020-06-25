@@ -260,11 +260,13 @@
                           </small>
                       </td>
                       <td class=" d-none d-sm-table-cell">
-                          {% if "FR" ==  task|to_class_name %}
-                          <div>Face Removal</div>
-                          {% elif "BGR" ==  task|to_class_name %}
-                          <div>Background Removal</div>
-                          {% endif %}
+                        {% if "FR" ==  task|to_class_name %}
+                        <div>Face Removal</div>
+                        {% elif "BGR" ==  task|to_class_name %}
+                        <div>Background Removal</div>
+                        {% elif "PR" ==  task|to_class_name %}
+                        <div>License Plate Removal</div>
+                        {% endif %}
                       </td>
                       <td class="project_progress d-none d-sm-table-cell">
                         {% if task.status == 'success' %}

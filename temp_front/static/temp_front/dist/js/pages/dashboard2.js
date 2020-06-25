@@ -220,6 +220,18 @@ $(document).on("click", '#delete_task', function(){
         $("tbody#".concat(id)).remove()
       }
   });
+  } else if ($("tbody#".concat(id)).attr('name') == "PR"){
+    $.ajax({
+      url: "/api/v1/pr/".concat(id, '/'),
+      type: "DELETE",
+      data: {
+        'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val()
+        // plus other data
+      },
+      success: function(text) {
+        $("tbody#".concat(id)).remove()
+      }
+  });
   }
 });
 

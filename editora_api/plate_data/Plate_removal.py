@@ -1,25 +1,26 @@
 import os
 import cv2
 import numpy as np
-from utils import detect_lp
+from .utils import detect_lp
 from os.path import splitext,basename
-from keras.models import model_from_json
+from tensorflow.compat.v1.keras.models import model_from_json
 import glob
 
 
 def load_model(path):
-    try:
-        path = splitext(path)[0]
-        with open('%s.json' % path, 'r') as json_file:
-            model_json = json_file.read()
-        model = model_from_json(model_json, custom_objects={})
-        model.load_weights('%s.h5' % path)
-        return model
-    except Exception as e:
-        print(e)
+    path = splitext(path)[0]
+    with open('%s.json' % path, 'r') as json_file:
+        model_json = json_file.read()
+    model = model_from_json(model_json, custom_objects={})
+    model.load_weights('%s.h5' % path)
+    return model
+    
 
-wpod_net_path = "wpod-net.json"
+wpod_net_path = os.path.realpath("wpod-net.json")
+head, tail = os.path.split(wpod_net_path)
+wpod_net_path = head + "/editora_api" + "/plate_data/" + tail
 wpod_net = load_model(wpod_net_path)
+print(wpod_net)
 
 def preprocess_image(image,resize=False):
     img = np.asarray(image)
@@ -29,30 +30,28 @@ def preprocess_image(image,resize=False):
     return img
 
 def remove_plate(image):
-    try :
-        Dmax = 608
-        Dmin = 288
-        vehicle = preprocess_image(image)
-        ratio = float(max(vehicle.shape[:2])) / min(vehicle.shape[:2])
-        side = int(ratio * Dmin)
-        bound_dim = min(side, Dmax)
-        _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.5)
-        pts=[]  
-        x_coordinates=cor[0][0]
-        y_coordinates=cor[0][1]
-        # store the top-left, top-right, bottom-left, bottom-right 
-        # of the plate license respectively
-        for i in range(4):
-            pts.append([int(x_coordinates[i]),int(y_coordinates[i])])
-        
-        pts = np.array(pts, np.int32)
-        pts = pts.reshape((-1,1,2))
-        vehicle_image = np.asarray(image)
-        
-        cv2.fillPoly(vehicle_image,[pts],color=[255,255,255])
-        return vehicle_image
-    except :
-        return image
+    Dmax = 608
+    Dmin = 288
+    vehicle = preprocess_image(image)
+    ratio = float(max(vehicle.shape[:2])) / min(vehicle.shape[:2])
+    side = int(ratio * Dmin)
+    bound_dim = min(side, Dmax)
+    _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.5)
+    pts=[]  
+    x_coordinates=cor[0][0]
+    y_coordinates=cor[0][1]
+    # store the top-left, top-right, bottom-left, bottom-right 
+    # of the plate license respectively
+    for i in range(4):
+        pts.append([int(x_coordinates[i]),int(y_coordinates[i])])
+    
+    pts = np.array(pts, np.int32)
+    pts = pts.reshape((-1,1,2))
+    vehicle_image = np.asarray(image)
+    
+    cv2.fillPoly(vehicle_image,[pts],color=[255,255,255])
+    return vehicle_image
+
 
 def get_plate(image_path):
         Dmax = 608

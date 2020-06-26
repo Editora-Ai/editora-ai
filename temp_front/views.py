@@ -64,10 +64,9 @@ def dashboard(request):
             reverse=True
         )
     ) 
-    remaining_bgrs = user_bgr_tasks.exclude(status="success")
-    remaining_bgrs = len(remaining_bgrs)
+    remaining_tasks = user_bgr_tasks.exclude(status="success").count() + user_bgr_tasks.exclude(status="success").count() + user_fr_tasks.exclude(status="success").count() + user_pr_tasks.exclude(status="success").count()
     data = {'fullname': fullname, 'name': name, 'tasks': all_tasks,
-            'company': company, 'remaining_bgrs': remaining_bgrs}
+            'company': company, 'remaining_tasks': remaining_tasks}
 
     return render(request, 'temp_front/dashboard.html', data)
 
@@ -125,8 +124,7 @@ def tasks(request):
             reverse=True
         )
     ) 
-    remaining_bgrs = user_bgr_tasks.exclude(status="success")
-    remaining_bgrs = len(remaining_bgrs)
+    remaining_tasks = user_bgr_tasks.exclude(status="success").count() + user_bgr_tasks.exclude(status="success").count() + user_fr_tasks.exclude(status="success").count() + user_pr_tasks.exclude(status="success").count()
     paginator = Paginator(all_tasks, 10)
     page = request.GET.get('page', 1)
     try:
@@ -136,7 +134,7 @@ def tasks(request):
     except EmptyPage:
         tasks = paginator.page(paginator.num_pages)
     data = {'fullname': fullname, 'name': name, 'tasks': tasks,
-            'company': company, 'paginator': paginator, 'remaining_bgrs': remaining_bgrs}
+            'company': company, 'paginator': paginator, 'remaining_tasks': remaining_tasks}
     return render(request, 'temp_front/tasks.html', data)
 
 @login_required(login_url="/log-in")

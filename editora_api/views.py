@@ -32,8 +32,6 @@ def bgr_process(image, name, idstr):
 class ListBGR(generics.ListCreateAPIView):
 
     def post(self, request):
-        outputs = []
-        ids = []
         info = {}
         for file in self.request.FILES.getlist('original_image'):
             new_task = BGR()
@@ -63,13 +61,9 @@ class ListBGR(generics.ListCreateAPIView):
             new_task.modified_image = "bgr/modified/" + random_str + "_" + file_name
             new_task.img_id= random_str
             new_task.save()
-            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
-            ids.append(new_task.id)
             bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
-        for i in ids:
-            for x in outputs:
-                info[i] = x
+            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }
@@ -135,8 +129,6 @@ def fr_process(image, name, idstr):
 class ListFR(generics.ListCreateAPIView):
 
     def post(self, request):
-        outputs = []
-        ids = []
         info = {}
         for file in self.request.FILES.getlist('original_image'):
             new_task = FR()
@@ -149,13 +141,9 @@ class ListFR(generics.ListCreateAPIView):
             new_task.modified_image = "fr/modified/" + random_str + "_" + file_name
             new_task.img_id= random_str
             new_task.save()
-            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
-            ids.append(new_task.id)
             fr_process.apply_async(kwargs={'image': 'media/fr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
-        for i in ids:
-            for x in outputs:
-                info[i] = x
+            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }
@@ -222,8 +210,6 @@ def pr_process(image, name, idstr):
 class ListPR(generics.ListCreateAPIView):
 
     def post(self, request):
-        outputs = []
-        ids = []
         info = {}
         for file in self.request.FILES.getlist('original_image'):
             new_task = PR()
@@ -236,13 +222,9 @@ class ListPR(generics.ListCreateAPIView):
             new_task.modified_image = "pr/modified/" + random_str + "_" + file_name
             new_task.img_id= random_str
             new_task.save()
-            outputs.append(request.META['HTTP_HOST'] + new_task.modified_image.url)
-            ids.append(new_task.id)
             pr_process.apply_async(kwargs={'image': 'media/pr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
-        for i in ids:
-            for x in outputs:
-                info[i] = x
+            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }

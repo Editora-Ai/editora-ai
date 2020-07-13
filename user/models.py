@@ -57,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     firstname = models.CharField(max_length=100, default="havent set")
     lastname = models.CharField(max_length=100,  default="havent set")
     company = models.CharField(max_length=100,  default="havent set", null=True)
+    user_logo = models.ImageField(upload_to='user_r/logos', null=True)
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

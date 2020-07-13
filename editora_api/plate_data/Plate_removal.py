@@ -1,5 +1,7 @@
 import os
 import cv2
+from PIL import Image
+import math
 import numpy as np
 from .utils import detect_lp
 from os.path import splitext,basename
@@ -20,80 +22,118 @@ wpod_net_path = os.path.realpath("wpod-net.json")
 head, tail = os.path.split(wpod_net_path)
 wpod_net_path = head + "/editora_api" + "/plate_data/" + tail
 wpod_net = load_model(wpod_net_path)
-print(wpod_net)
 
 def preprocess_image(image,resize=False):
+
     img = np.asarray(image)
-    img = img / 255
-    if resize:
-        img = cv2.resize(img, (224,224))
+    img = np.array(image , np.float32)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img /= 255
+    
     return img
 
-def remove_plate(image):
-    try:
+def watermarker(img,logo_img , pts):
+    bed2 = np.full(shape = (img.shape[0] ,img.shape[1]  ,3) , fill_value = 0)
+    Xes =[]
+    Yes = []
+    for i in range(4):
+        Xes.append(pts[i][0][0])
+        Yes.append(pts[i][0][1])
+    Xes = np.array(Xes)
+    Yes = np.array(Yes)
+    rep_img_x = pts[0][0][0]
+    if pts[3][0][0]> pts[0][0][0]:
+        rep_img_x = pts[3][0][0]
+    rep_img_X = pts[1][0][0]
+    if pts[2][0][0]< pts[1][0][0]:
+        rep_img_X = pts[2][0][0]
+    
+    rep_img_y = pts[0][0][1]
+    if pts[3][0][0]> pts[0][0][1]:
+        rep_img_y = pts[3][0][1]
+    rep_img_Y = pts[1][0][1]
+    if pts[2][0][0]< pts[1][0][1]:
+        rep_img_Y = pts[2][0][1]
+    x_mean = Yes.mean()
+    y_mean = Xes.mean()
+
+    resize_number = pts[2][0][1]-pts[1][0][1]
+    resize_number2 = pts[1][0][0]-pts[0][0][0]
+
+    
+    if (resize_number*logo_img.shape[1]/logo_img.shape[0])< (pts[1][0][0] - pts[0][0][0]) :
+        logoimg = cv2.resize(logo_img , dsize = (int(resize_number*logo_img.shape[1]/logo_img.shape[0]) , resize_number),interpolation =  cv2.INTER_AREA)
+
+    if (resize_number*logo_img.shape[1]/logo_img.shape[0])> (pts[1][0][0] - pts[0][0][0]) :
+        logoimg = cv2.resize(logo_img , dsize = (int(resize_number2) , int(resize_number2*logo_img.shape[0]/logo_img.shape[1])),interpolation =  cv2.INTER_AREA)
+    logo_height = logoimg.shape[0]
+    logo_width = logoimg.shape[1]
+    logoimg = np.array(logoimg)
+
+    bed2[int((x_mean-logo_height//2)):int((x_mean+(logo_height-logo_height//2))) ,int((y_mean-logo_width//2)):int((y_mean+(logo_width-logo_width//2)))] = logoimg
+
+    bed2 = np.array(bed2 , np.uint8)
+    bed2 = Image.fromarray(bed2)
+    angle = 180*(math.atan(((pts[0][0][1]-pts[1][0][1])/(pts[1][0][0]-pts[0][0][0]))))/3.141692
+    bed2 = bed2.rotate(angle , resample = 0,center = (y_mean , x_mean))
+
+    bed2 = np.array(bed2 , np.uint8)
+    img[bed2!=0] =bed2[bed2!=0]
+    return img
+
+def get_points(image):
+    try :
+        X_IMG_SIZE = image.shape[0] 
+        Y_IMG_SIZE = image.shape[1]
         Dmax = 608
         Dmin = 288
         vehicle = preprocess_image(image)
         ratio = float(max(vehicle.shape[:2])) / min(vehicle.shape[:2])
         side = int(ratio * Dmin)
         bound_dim = min(side, Dmax)
-        _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.5)
+        _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.4)
+        
+        const1,const2 = image.shape[0] , image.shape[1]
         pts=[]  
         x_coordinates=cor[0][0]
         y_coordinates=cor[0][1]
-        # store the top-left, top-right, bottom-left, bottom-right 
-        # of the plate license respectively
         for i in range(4):
             pts.append([int(x_coordinates[i]),int(y_coordinates[i])])
-        
         pts = np.array(pts, np.int32)
         pts = pts.reshape((-1,1,2))
-        vehicle_image = np.asarray(image)
         
-        cv2.fillPoly(vehicle_image,[pts],color=[255,255,255])
-        return vehicle_image
-    except:
-        return image
-
-
-def get_plate(image_path):
-        Dmax = 608
-        Dmin = 288
-        vehicle = preprocess_image(image_path)
-        ratio = float(max(vehicle.shape[:2])) / min(vehicle.shape[:2])
-        side = int(ratio * Dmin)
-        bound_dim = min(side, Dmax)
-        _ , LpImg, _, cor = detect_lp(wpod_net, vehicle, bound_dim, lp_threshold=0.4)
-        return LpImg, cor
-
-def multi_plate(array_image):
-    img = np.array(array_image , np.uint8)
-    try :
-        LpImg,cor = get_plate(img)
-        vehicle_image = np.asarray(array_image)
-        for i in range(len(LpImg)):
-            pts=[]  
-            x_coordinates=cor[i][0]
-            y_coordinates=cor[i][1]
-            for j in range(4):
-                pts.append([int(x_coordinates[j]),int(y_coordinates[j])])
-            pts = np.array(pts, np.int32)
-            pts = pts.reshape((-1,1,2))
-            cv2.fillPoly(vehicle_image,[pts],color=[255,255,255])
-        return vehicle_image
+        
+        ST = True
+    
+        return  pts , ST
     except :
-        return array_image
+        ST = False
+        return image , ST
 
-def fixchannels(img):
-	imw = img.shape[0]
-	imh = img.shape[1]
-	imd = img.shape[2]
-	bed = np.zeros(shape = (imw, imh , imd))
-	b = img[:,:,0]
-	g = img[:,:,1]
-	r = img[:,:,2]
-	bed[:,:,0] = r
-	bed[:,:,1] = g
-	bed[:,:,2] = b
-	return bed
+def remove_plate_W(img):
+    pts , st = get_points(img)
+    if st == True :
+        cv2.fillConvexPoly(img,pts,color=[255,255,255])
+        
+        cv2.polylines(img,pts,True,(255,255,255),thickness=1,lineType=cv2.LINE_AA)
+        return img
+    else :
+        return img
+ 
+def replace_LOGO_on_white_plate(img , logo):
+    ptss , st = get_points(img)
+    if st == True :
+        cv2.fillConvexPoly(img,ptss,color=[255,255,255])
+        cv2.polylines(img = img,pts=[ptss],isClosed= True,color = (255,255,255),thickness=1,lineType=cv2.LINE_AA)
+        img = watermarker(img , logo, ptss)
+        return img
+    else :
+        return img
+def replace_JUST_LOGO(img , logo):
+    pts , st = get_points(img)
+    if st == True :
+        img = watermarker(img , logo, pts)
+        return img
+    else :
+        return img
 ####################################### use remove_plate as final function ##############################

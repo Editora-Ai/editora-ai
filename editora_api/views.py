@@ -11,6 +11,7 @@ import cv2
 import numpy as np
 import os
 from .models import BGR, FR, PR
+from user.models import User
 
 
 @app.task
@@ -192,14 +193,19 @@ class DetailFR(generics.RetrieveUpdateDestroyAPIView):
 
 
 @app.task
-def pr_process(image, name, idstr):
-    from .plate_data.Plate_removal import remove_plate
+def pr_process(image, name, idstr, user_id):
+    from .plate_data.Plate_removal import replace_LOGO_on_white_plate
     obj = PR.objects.get(img_id=idstr)
     obj.status = "processing"
     obj.save()
     img = cv2.imread(image)
+    if User.objects.get(id=user_id).user_logo:
+        print(User.objects.get(id=user_id).user_logo)
+        logo = cv2.imread('media/' + str(User.objects.get(id=user_id).user_logo))
+    else:
+        logo = cv2.imread("media/user_r/logos/default.jpg")
     try:
-        modified_img = remove_plate(img)
+        modified_img = replace_LOGO_on_white_plate(img, logo)
         cv2.imwrite("media/pr/modified/" + idstr + "_" + name, modified_img)
         obj.status = "success"
     except:
@@ -223,7 +229,7 @@ class ListPR(generics.ListCreateAPIView):
             new_task.img_id= random_str
             new_task.save()
             pr_process.apply_async(kwargs={'image': 'media/pr/original/' + random_str + "_" + file_name,
-                        'name': file_name, 'idstr': random_str})
+                        'name': file_name, 'idstr': random_str, 'user_id': self.request.user.id})
             info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,

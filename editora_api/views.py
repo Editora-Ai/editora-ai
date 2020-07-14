@@ -200,7 +200,6 @@ def pr_process(image, name, idstr, user_id):
     obj.save()
     img = cv2.imread(image)
     if User.objects.get(id=user_id).user_logo:
-        print(User.objects.get(id=user_id).user_logo)
         logo = cv2.imread('media/' + str(User.objects.get(id=user_id).user_logo))
     else:
         logo = cv2.imread("media/user_r/logos/default.jpg")

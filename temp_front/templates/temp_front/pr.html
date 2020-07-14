@@ -196,7 +196,42 @@
                     You can use this service to detect any license plates in images and anonymize them for your own privacy.
                   </p>
                 </div>
+                <div class="card bg-success">
+                  <div class="card-header">
+                    <h3 class="card-title">New feature - Replace Your Logo</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                      </button>
+                    </div>
+                    <!-- /.card-tools -->
+                  </div>
+                  <!-- /.card-header -->
+                  <div class="card-body">
+                    You can now upload your customized logo to replace the car license plates. Just select your logo and click on upload!
+                    <hr>
+                    <form name="logoform" method="POST" enctype="multipart/form-data"> 
+                      {% csrf_token %} 
+                      <div class="input-group mb-3">
+                        <div class="custom-file">
+                          <input name="logo" type="file" class="custom-file-input" id="inputGroupFile02">
+                          <label class="custom-file-label" for="inputGroupFile02">
+                            {% if logo_image|length > 0 %}
+                              {{ logo_image }}
+                            {% else %}
+                              Choose logo
+                            {% endif %}
+                          </label>
+                        </div>
+                        <div class="input-group-append">
+                          <span name="submit" onclick="logoform.submit()" class="input-group-text" id="">Submit logo</span>
+                        </div>
+                        <div class="input-group-append">
+                          <input name="clear_logo" type="submit" value="Clear current logo" class="input-group-text" id="">
+                        </div>
+                      </div>                  
+                  </form> 
                 </div>
+
               </div>
               <!-- /.card-body -->
               <div class="card">
@@ -312,6 +347,11 @@
       $(this).addClass('active');
     });
   })
+
+  $(".custom-file-input").on("change", function() {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  });
 </script>
 </body>
 </html>

@@ -9,6 +9,8 @@ from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from editora_api.models import BGR, FR, PR
+from user.models import User
+import ntpath
 
 
 def confirm_email(request, uidb64, token):
@@ -96,15 +98,41 @@ def faceremoval(request):
 
 @login_required(login_url="/log-in")
 def plateremoval(request):
-    fullname = (request.user.firstname + " " + request.user.lastname).title()
-    name = request.user.firstname.title()
-    if request.user.company is not None:
-        company = request.user.company.upper()
+    if request.method == 'POST':
+        if request.POST.get("clear_logo"):
+            account = request.user
+            account.user_logo = None
+            account.save()
+        else:
+            try:
+                image_logo = request.FILES['logo']
+                account = request.user
+                account.user_logo = image_logo
+                account.save()
+            except:
+                pass
+        # In return
+        fullname = (request.user.firstname + " " + request.user.lastname).title()
+        name = request.user.firstname.title()
+        logo_image = ntpath.basename(str(request.user.user_logo))
+        if request.user.company is not None:
+            company = request.user.company.upper()
+        else:
+            company = " "
+        data = {'fullname': fullname, 'name': name,
+                'company': company, 'logo_image': logo_image }
+        return render(request, 'temp_front/pr.html', data)
     else:
-        company = " "
-    data = {'fullname': fullname, 'name': name,
-            'company': company }
-    return render(request, 'temp_front/pr.html', data)
+        fullname = (request.user.firstname + " " + request.user.lastname).title()
+        name = request.user.firstname.title()
+        logo_image = ntpath.basename(str(request.user.user_logo))
+        if request.user.company is not None:
+            company = request.user.company.upper()
+        else:
+            company = " "
+        data = {'fullname': fullname, 'name': name,
+                'company': company, 'logo_image': logo_image }
+        return render(request, 'temp_front/pr.html', data)
 
 @login_required(login_url="/log-in")
 def tasks(request):

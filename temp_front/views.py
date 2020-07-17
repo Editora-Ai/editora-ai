@@ -1,16 +1,30 @@
-from django.shortcuts import render, redirect
+import ntpath
+import requests
 from itertools import chain
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.mail import send_mail, BadHeaderError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound, Http404, JsonResponse
 from django.conf import settings
+from django.contrib.auth.password_validation import validate_password
+from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from allauth.account.utils import send_email_confirmation
 from editora_api.models import BGR, FR, PR
 from user.models import User
-import ntpath
+
+
+
+site_key = settings.RECAPTCHA_SITE_KEY
+secret_key = settings.RECAPTCHA_SECRET_KEY
+
+
+class HttpResponseNoContent(HttpResponse):
+    status_code = 204
 
 
 def confirm_email(request, uidb64, token):
@@ -27,26 +41,91 @@ def index(request):
                     message=message,
                     recipient_list=['editoraaiteam@gmail.com'],
                     )
-    return render(request, 'temp_front/index.html')
+    return render(request, 'temp_front/index.html', {'site_key': site_key })
 
-
+@csrf_exempt
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('/dashboard')
-    return render(request, 'temp_front/log-in.html')
+    if request.method == 'POST':
+        ### Recaptcha ###
+        data = {
+            'response': request.POST.get('token'),
+            'secret': secret_key
+        }
+        resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result_json = resp.json()
 
+        if not result_json.get('success'):
+            return render(request, 'temp_front/log-in.html', {'is_robot': True, 'site_key': site_key})
+        ### Recaptcha ###
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        try:
+            user = auth.authenticate(email=email, password=password)
+            auth.login(request, user)
+        except:
+            return HttpResponseNotFound("404")
+        return redirect('/dashboard')
+    else:
+        return render(request, 'temp_front/log-in.html', {'site_key': site_key })
+
+@csrf_exempt
 def signup(request):
-    try:
-        request.user.auth_token.delete()
-    except (AttributeError, ObjectDoesNotExist):
-        pass
-    logout(request)
-    return render(request, 'temp_front/sign-up.html')
+    if request.method == "POST":
+        ### Recaptcha ###
+        data = {
+            'response': request.POST.get('token'),
+            'secret': secret_key
+        }
+        resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result_json = resp.json()
+
+        if not result_json.get('success'):
+            return render(request, 'temp_front/sign-up.html', {'is_robot': True, 'site_key': site_key})
+        ### Recaptcha ###
+        new_user = User()
+        new_user.email = request.POST.get('email')
+        new_user.firstname = request.POST.get('firstname')
+        new_user.lastname = request.POST.get('lastname')
+        new_user.company = request.POST.get('company')
+        try:
+            if validate_password(request.POST.get('password1')) == None:
+                new_user.set_password(request.POST.get('password1'))
+        except:
+            mess = {"responseText": "not good!"}
+            return JsonResponse(mess, status=404)
+        new_user.save()
+        # confirm_mail_all_auth
+        send_email_confirmation(request, new_user, True)
+        return HttpResponseNoContent()
+    else:
+        try:
+            request.user.auth_token.delete()
+        except (AttributeError, ObjectDoesNotExist):
+            pass
+        logout(request)
+        return render(request, 'temp_front/sign-up.html', {'site_key': site_key })
 
 def password_reset(request):
+    if request.method == 'POST':
+        ### Recaptcha ###
+        data = {
+            'response': request.POST.get('token'),
+            'secret': secret_key
+        }
+        resp = requests.post('https://www.google.com/recaptcha/api/siteverify', data=data)
+        result_json = resp.json()
+
+        if not result_json.get('success'):
+            return render(request, 'temp_front/password-reset.html', {'is_robot': True, 'site_key': site_key})
+        ### Recaptcha ###
+        try:
+            user = User.objects.get(email=request.POST.get('email'))
+        except:
+            mess = {"responseText": "Not correct mail!"}
+            return JsonResponse(mess, status=404)
     if request.user.is_authenticated:
         return redirect('/dashboard/account')
-    return render(request, 'temp_front/password-reset.html')
+    return render(request, 'temp_front/password-reset.html', {'site_key': site_key })
 
 @login_required(login_url="/log-in")
 def dashboard(request):

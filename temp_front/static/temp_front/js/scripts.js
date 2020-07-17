@@ -4,6 +4,9 @@
    Description: Custom JS file
 */
 
+// Local var site_key = "6LeebLIZAAAAABaSN6j959jEqKBrp33xds0chbBo";
+var site_key = "6LcfbLIZAAAAAFIpKWwjgW60_C3CD8fmJQyulgpH";
+
 (function($) {
     "use strict";
 
@@ -154,21 +157,26 @@
 		}
     });
 
-
     /* Sign Up Form */
-    $("#signUpForm").validator().on("submit", function(event) {
-    	if (event.isDefaultPrevented()) {
-            // handle the invalid form...
-            sformError();
-            ssubmiterrorMSG(false, "Please fill all fields!");
-        } else {
-            // everything looks good!
-            event.preventDefault();
-            ssubmitForm();
-        }
+    grecaptcha.ready(function() {
+
+        $("#signUpForm").validator().on("submit", function(event) {
+            if (event.isDefaultPrevented()) {
+                // handle the invalid form...
+                sformError();
+                ssubmiterrorMSG(false, "Please fill all fields!");
+            } else {
+                // everything looks good!
+                event.preventDefault();
+                grecaptcha.execute(site_key, {action: 'logInForm'}).then(function(token) {
+                    var g_token = token
+                    ssubmitForm(g_token);
+            });
+            }
+        });
     });
 
-    function ssubmitForm() {
+    function ssubmitForm(g_token) {
         // initiate variables with form content
 		var email = $("#semail").val();
         var name = $("#fname").val();
@@ -180,8 +188,8 @@
         $("#smsgSubmit").removeClass().addClass(msgClasses).text("Please wait...!");
         $.ajax({
             type: "POST",
-            url: "rest-auth/registration/",
-            data: "email=" + email + "&company=" + company + "&firstname=" + name + "&password1=" + password + "&password2=" + password + "&lastname=" + lastname,
+            url: "sign-up",
+            data: "email=" + email + "&company=" + company + "&firstname=" + name + "&password1=" + password + "&password2=" + password + "&lastname=" + lastname + "&token=" + g_token,
             success: function(text) {
                 sformSuccess("Successfully Registered. Please check your email to activate your account!");
             },
@@ -231,19 +239,25 @@
     }
 
     /* Log In Form */
-    $("#logInForm").validator().on("submit", function(event) {
-    	if (event.isDefaultPrevented()) {
-            // handle the invalid form...
-            lformError();
-            lsubmiterrorMSG(false, "Please fill all fields!");
-        } else {
-            // everything looks good!
-            event.preventDefault();
-            lsubmitForm();
-        }
+    grecaptcha.ready(function() {
+
+        $("#logInForm").validator().on("submit", function(event) {
+            if (event.isDefaultPrevented()) {
+                // handle the invalid form...
+                lformError();
+                lsubmiterrorMSG(false, "Please fill all fields!");
+            } else {
+                // everything looks good!
+                event.preventDefault();
+                grecaptcha.execute(site_key, {action: 'logInForm'}).then(function(token) {
+                    var g_token = token
+                    lsubmitForm(g_token);
+                });
+            }
+        });
     });
 
-    function lsubmitForm() {
+    function lsubmitForm(g_token) {
         // initiate variables with form content
 		var email = $("#lemail").val();
 		var password = $("#lpassword").val();
@@ -251,8 +265,8 @@
 
         $.ajax({
             type: "POST",
-            url: "rest-auth/login/",
-            data: "email=" + email + "&password=" + password,
+            url: "log-in",
+            data: "email=" + email + "&password=" + password + "&token=" + g_token,
             success: function(text) {
                 lsubmitMSG(text);
             },

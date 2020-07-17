@@ -131,6 +131,7 @@
                             <div class="form-message">
                                 <div id="smsgSubmit" class="h3 text-center hidden"></div>
                             </div>
+                            <input type="hidden" name="g-recaptcha-response" id='recaptcha'>
                         </form>
                     </div> <!-- end of form container -->
                     <!-- end of sign up form -->
@@ -143,6 +144,7 @@
 
 
     <!-- Scripts -->
+    <script src="https://www.google.com/recaptcha/api.js?render={{ site_key }}"></script>
     <script src="{% static "temp_front/js/jquery.min.js" %}"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
     <script src="{% static "temp_front/js/popper.min.js" %}"></script> <!-- Popper tooltip library for Bootstrap -->
     <script src="{% static "temp_front/js/bootstrap.min.js" %}"></script> <!-- Bootstrap framework -->

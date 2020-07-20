@@ -207,7 +207,7 @@
                   </div>
                   <!-- /.card-header -->
                   <div class="card-body">
-                    You can now upload your customized logo to replace the car plates. Just select your logo and click on submit logo!
+                    You can now upload your customized logo to replace the car plates. Just select your logo and click on submit logo! <br> Don't forget to assign a background since logos will be converted to jpg format.
                     <hr>
                     <form name="logoform" method="POST" enctype="multipart/form-data"> 
                       {% csrf_token %} 
@@ -218,7 +218,7 @@
                             {% if logo_image|length > 0 %}
                               {{ logo_image }}
                             {% else %}
-                              Choose logo
+                              Logos will be converted to jpg! 
                             {% endif %}
                           </label>
                         </div>

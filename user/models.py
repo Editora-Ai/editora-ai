@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser,BaseUserManager, PermissionsMixin
 from django.utils import timezone
 import datetime
+from django.core.files.base import ContentFile
+from PIL import Image
+from io import BytesIO
 
 
 class UserManager(BaseUserManager):
@@ -65,5 +68,22 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     USERNAME_FIELD = 'email'
 
-    def __str__(self):              # __unicode__ on Python 2
+    def save(self):
+        if self.user_logo:
+            filename = "%s.jpg" % self.user_logo.name.split('.')[0]
+
+            image = Image.open(self.user_logo)
+            # for PNG images discarding the alpha channel and fill it with some color
+            if image.mode in ('RGBA', 'LA'):
+                background = Image.new(image.mode[:-1], image.size, '#fff')
+                background.paste(image, image.split()[-1])
+                image = background
+            image_io = BytesIO()
+            image.save(image_io, format='JPEG', quality=100)
+
+            # change the image field value to be the newly modified image value
+            self.user_logo.save(filename, ContentFile(image_io.getvalue()), save=False)
+        super(User, self).save()
+
+    def __str__(self):              
         return self.email

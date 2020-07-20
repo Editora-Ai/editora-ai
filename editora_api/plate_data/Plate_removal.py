@@ -104,7 +104,18 @@ def get_points(image):
         
         
         ST = True
-    
+        if pts[0][0][0] > image.shape[1] :
+            pts[0][0][0] = image.shape[1]
+        if pts[1][0][0] > image.shape[1] :
+            pts[1][0][0] = image.shape[1]
+        if pts[2][0][0] > image.shape[1] :
+            pts[2][0][0] = image.shape[1]
+        if pts[3][0][0] > image.shape[1] :
+            pts[3][0][0] = image.shape[1]
+        if pts[0][0][0] <0 :
+            pts[0][0][0] = 0
+        if pts[3][0][0] <0 :
+            pts[3][0][0] = 0
         return  pts , ST
     except :
         ST = False

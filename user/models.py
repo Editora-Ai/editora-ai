@@ -68,7 +68,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
     USERNAME_FIELD = 'email'
 
-    def save(self):
+    def save(self, *args, **kwargs):
         if self.user_logo:
             filename = "%s.jpg" % self.user_logo.name.split('.')[0]
 
@@ -83,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
             # change the image field value to be the newly modified image value
             self.user_logo.save(filename, ContentFile(image_io.getvalue()), save=False)
-        super(User, self).save()
+        super(User, self).save(*args, **kwargs)
 
     def __str__(self):              
         return self.email

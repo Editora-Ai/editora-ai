@@ -45,6 +45,8 @@ def index(request):
 
 @csrf_exempt
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('/dashboard')
     if request.method == 'POST':
         ### Recaptcha ###
         data = {
@@ -70,6 +72,8 @@ def login(request):
 
 @csrf_exempt
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('/dashboard')
     if request.method == "POST":
         ### Recaptcha ###
         data = {
@@ -124,7 +128,7 @@ def password_reset(request):
             mess = {"responseText": "Not correct mail!"}
             return JsonResponse(mess, status=404)
     if request.user.is_authenticated:
-        return redirect('/dashboard/account')
+        return redirect('dashboard/account')
     return render(request, 'temp_front/password-reset.html', {'site_key': site_key })
 
 @login_required(login_url="/log-in")
@@ -266,9 +270,5 @@ def account(request):
 
 @login_required(login_url="/log-in")
 def mylogout(request):
-    try:
-        request.user.auth_token.delete()
-    except (AttributeError, ObjectDoesNotExist):
-        pass
     logout(request)
     return redirect('/')

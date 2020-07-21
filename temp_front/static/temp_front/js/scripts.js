@@ -5,7 +5,7 @@
 */
 
 // Local var site_key = "6LeebLIZAAAAABaSN6j959jEqKBrp33xds0chbBo";
-var site_key = "6LcfbLIZAAAAAFIpKWwjgW60_C3CD8fmJQyulgpH";
+var site_key = "6LeebLIZAAAAABaSN6j959jEqKBrp33xds0chbBo";
 
 (function($) {
     "use strict";

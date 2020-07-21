@@ -5,7 +5,7 @@
 */
 
 // Local var site_key = "6LeebLIZAAAAABaSN6j959jEqKBrp33xds0chbBo";
-var site_key = "6LeebLIZAAAAABaSN6j959jEqKBrp33xds0chbBo";
+var site_key = $("#site_key_js").val();
 
 (function($) {
     "use strict";

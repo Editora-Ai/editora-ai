@@ -69,7 +69,8 @@ def watermarker(img,logo_img , pts):
     logo_height = logoimg.shape[0]
     logo_width = logoimg.shape[1]
     logoimg = np.array(logoimg)
-
+    if (y_mean-logo_width//2)< 0:
+        y_mean+=1
     bed2[int((x_mean-logo_height//2)):int((x_mean+(logo_height-logo_height//2))) ,int((y_mean-logo_width//2)):int((y_mean+(logo_width-logo_width//2)))] = logoimg
 
     bed2 = np.array(bed2 , np.uint8)

@@ -2,7 +2,7 @@ var btnUpload = $("#upload_file"),
 		btnOuter = $(".button_outer");
 	btnUpload.on("change", function(e){
 		var ext = btnUpload.val().split('.').pop().toLowerCase();
-		if($.inArray(ext, ['gif','png','jpg','jpeg']) == -1) {
+		if($.inArray(ext, ['gif','png','jpg','jpeg','webp']) == -1) {
 			$(".error_msg").text("Not an Image...");
 		} else {
 		// Multiple file upload

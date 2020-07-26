@@ -64,7 +64,7 @@ class ListBGR(generics.ListCreateAPIView):
             new_task.save()
             bgr_process.apply_async(kwargs={'image': 'media/bgr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
-            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
+            info[file_name] = { 'id': new_task.id, 'url': request.META['HTTP_HOST'] + new_task.modified_image.url }
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }
@@ -144,7 +144,7 @@ class ListFR(generics.ListCreateAPIView):
             new_task.save()
             fr_process.apply_async(kwargs={'image': 'media/fr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str})
-            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
+            info[file_name] = { 'id': new_task.id, 'url': request.META['HTTP_HOST'] + new_task.modified_image.url }
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }
@@ -229,7 +229,7 @@ class ListPR(generics.ListCreateAPIView):
             new_task.save()
             pr_process.apply_async(kwargs={'image': 'media/pr/original/' + random_str + "_" + file_name,
                         'name': file_name, 'idstr': random_str, 'user_id': self.request.user.id})
-            info[new_task.id] = request.META['HTTP_HOST'] + new_task.modified_image.url
+            info[file_name] = { 'id': new_task.id, 'url': request.META['HTTP_HOST'] + new_task.modified_image.url }
         content = {'Message': 'Your task is successfully queued on editora.',
                    'outputs': info,
                    }

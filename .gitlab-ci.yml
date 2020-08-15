@@ -1,0 +1,20 @@
+stages:
+  - test
+
+image: python:latest
+
+services:
+  - postgres:latest
+
+cache:
+  paths:
+    - ~/.cache/pip/
+
+before_script:
+  - python -V
+  - pip install -r requirements.txt
+
+test:
+  stage: test
+  script:
+    - python manage.py test

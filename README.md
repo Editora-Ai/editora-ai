@@ -1,7 +1,7 @@
 <p align="center">
-  <img src="./hp.jpg" alt="EditoraAI Homepage" width="250"/>
-  <img src="./dash.jpg" alt="Service Dashboard" width="250"/>
-  <img src="./doc.jpg" alt="API Docs" width="250"/>
+  <img src="./hp.jpg" alt="EditoraAI Homepage" width="450"/>
+  <img src="./dash.jpg" alt="Service Dashboard" width="450"/>
+  <img src="./doc.jpg" alt="API Docs" width="450"/>
   <br><em>Homepage · Admin Dashboard · API Documentation</em>
 </p>
 

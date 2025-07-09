@@ -1,8 +1,7 @@
 <p align="center">
   <img src="./hp.jpg" alt="EditoraAI Homepage" width="300"/>
-  <img src="./dash.jpg" alt="Service Dashboard" width="250"/>
   <img src="./doc.jpg" alt="API Docs" width="300"/>
-  <br><em>Homepage · Admin Dashboard · API Documentation</em>
+  <br><em>Homepage · API Documentation</em>
 </p>
 
 # 🖼️ EditoraAI – Intelligent Image Processing Platform

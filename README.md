@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="./hp.jpg" alt="EditoraAI Homepage" width="300"/>
-  <img src="./doc.jpg" alt="API Docs" width="300"/>
+  <img src="./hp.jpg" alt="EditoraAI Homepage" width="400"/>
+  <img src="./doc.jpg" alt="API Docs" width="400"/>
   <br><em>Homepage · API Documentation</em>
 </p>
 
